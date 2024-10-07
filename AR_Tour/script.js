@@ -20,8 +20,6 @@ const detectionConfig = {
     'clock': { color: 'gold' }
 };
 
-
-
 // Load the COCO-SSD model and start the webcam
 async function init() {
     try {
@@ -137,6 +135,72 @@ function drawPrediction(prediction, gender = null) {
         ctx.fillText(gender || prediction.class, x, y > 10 ? y - 5 : 10);
     }
 }
+
+function setCanvasSize() {
+    // ... existing function ...
+}
+
+function getLocation() {
+    return new Promise((resolve, reject) => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        } else {
+            reject(new Error("Geolocation is not supported by this browser."));
+        }
+    });
+}
+
+async function displayLocation() {
+    try {
+        const position = await getLocation();
+        const { latitude, longitude } = position.coords;
+        
+        // Create a container for the location information
+        const locationDiv = document.createElement('div');
+        locationDiv.id = 'location-info';
+        locationDiv.style.position = 'absolute';
+        locationDiv.style.top = '10px';
+        locationDiv.style.left = '10px';
+        locationDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        locationDiv.style.color = 'white';
+        locationDiv.style.padding = '10px';
+        locationDiv.style.borderRadius = '5px';
+        
+        // Display coordinates
+        locationDiv.innerHTML = `Latitude: ${latitude.toFixed(6)}<br>Longitude: ${longitude.toFixed(6)}`;
+        
+        // Append to body
+        document.body.appendChild(locationDiv);
+        
+        // Optional: Use a mapping service to get more readable location info
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+        const data = await response.json();
+        if (data.display_name) {
+            locationDiv.innerHTML += `<br>Location: ${data.display_name}`;
+        }
+    } catch (error) {
+        console.error("Error getting location:", error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set up video stream
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            video.addEventListener('loadedmetadata', setCanvasSize);
+        })
+        .catch(error => console.error('Error accessing camera:', error));
+
+    // Display user's location
+    displayLocation();
+
+    // ... rest of your existing code (COCO-SSD and BlazeFace) ...
+});
 
 // Start the application
 init();
