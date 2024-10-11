@@ -2,6 +2,7 @@
 let video, canvas, ctx, cocoSsdModel;
 let detectedObjects = []; // Array to store detected objects and faces
 let objectData; // Variable to store the loaded JSON data
+let isClicked = false;
 
 // Load the JSON data
 async function loadObjectData() {
@@ -15,13 +16,12 @@ function getObjectData(identifier) {
 }
 
 // Function to detect faces and provide results
-async function detectFrame() {   
+async function detectFrame() {
     // Detect faces, landmarks, descriptors, age, and gender from the video feed
     const faceAIData = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors().withAgeAndGender()
-    
+
     // Clear the canvas before drawing new results
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-
 
     // Detect objects
     if (cocoSsdModel) {
@@ -45,7 +45,7 @@ function resizeDetections(detections, dimensions) {
     return detections.map(detection => {
         const { bbox, class: className, score } = detection;
         const [x, y, boxWidth, boxHeight] = bbox;
-        
+
         return {
             bbox: [
                 (x / video.videoWidth) * width,
@@ -59,66 +59,97 @@ function resizeDetections(detections, dimensions) {
     });
 }
 
-// function applyFilter(sourceCanvas, filter) {
-//     const tempCanvas = document.createElement('canvas');
-//     tempCanvas.width = sourceCanvas.width;
-//     tempCanvas.height = sourceCanvas.height;
-//     const tempCtx = tempCanvas.getContext('2d');
-    
-//     tempCtx.filter = filter;
-//     tempCtx.drawImage(sourceCanvas, 0, 0);
-    
-//     return tempCanvas;
-// }
+function drawDetection(detection, info, type) {
+    // Determine the bounding box coordinates and dimensions based on detection type
+    let x, y, width, height;
+    let label;
+
+    if (type === 'face') {
+        // For face detections, use the 'detection' property
+        const box = detection.detection.box;
+        x = box.x;
+        y = box.y;
+        width = box.width;
+        height = box.height;
+
+        // Create a label with gender and rounded age for face detections
+        label = `${detection.gender}, Age: ${Math.round(detection.age)}`;
+    } else {
+        // For object detections, use the 'bbox' array
+        [x, y, width, height] = detection.bbox;
+
+        // Use the class name as the label for object detections
+        label = detection.class;
+    }
+
+    // Calculate the scaling factors
+    const scaleX = video.videoWidth / canvas.width;
+    const scaleY = video.videoHeight / canvas.height;
+
+    //if click show alert
+    if (isClicked) {
+        if (clickPos.x >= x*scaleX && clickPos.x <= x*scaleX + width*scaleX && 
+            clickPos.y >= y*scaleY && clickPos.y <= y*scaleY + height*scaleY) {
+            const randomDescription = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
+            alert(`${label}: ${randomDescription}`);
+            isClicked = false;
+        }
+    }
+
+    // Create a temporary canvas for the detection area
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.filter = type === 'face' ? "grayscale(90%)blur(3px)" : "brightness(200%)";
+
+    // Draw the detection area onto the temporary canvas, applying the scaling
+    tempCtx.drawImage(
+        video,
+        x * scaleX,
+        y * scaleY,
+        width * scaleX,
+        height * scaleY,
+        0,
+        0,
+        width,
+        height
+    );
+
+    // Draw the filtered area back onto the main canvas
+    ctx.drawImage(tempCanvas, x, y);
+
+    // Draw bounding box
+    ctx.strokeStyle = info.color;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, width, height);
+
+    // Draw label above the box
+    ctx.fillStyle = info.color;
+    ctx.font = '16px Arial';
+    ctx.fillText(label, x, y - 5);
+
+    // Store the detection in the detectedObjects array
+    detectedObjects.push({
+        type: type,
+        boundingBox: { x, y, width, height },
+        label: label,
+        descriptions: info.descriptions
+    });
+}
 
 function drawObjectDetections(detections) {
     detections.forEach(detection => {
-        const [x, y, width, height] = detection.bbox;
-        const label = detection.class;
-
-        const objectInfo = getObjectData(label);
+        const objectInfo = getObjectData(detection.class);
         if (objectInfo) {
-            // Create a temporary canvas for the detection area
-            // const tempCanvas = document.createElement('canvas');
-            // tempCanvas.width = width;
-            // tempCanvas.height = height;
-            // const tempCtx = tempCanvas.getContext('2d');
-
-            // // Draw the detection area onto the temporary canvas
-            // tempCtx.drawImage(video, x, y, width, height);
-
-            // // Apply filter
-            // const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
-
-            // // Draw the filtered area back onto the main canvas
-            // ctx.drawImage(filteredCanvas, x, y);
-
-            // Draw bounding box
-            ctx.strokeStyle = objectInfo.color;
-            ctx.lineWidth = 2;
-            ctx.strokeRect(x, y, width, height);
-
-            // Draw label above the box
-            ctx.fillStyle = objectInfo.color;
-            ctx.font = '16px Arial';
-            ctx.fillText(label, x, y - 5);
-
-            // Store the detection in the detectedObjects array
-            detectedObjects.push({
-                type: 'object',
-                boundingBox: {x, y, width, height},
-                label: label,
-                descriptions: objectInfo.descriptions
-            });
+            drawDetection(detection, objectInfo, 'object');
         }
     });
 }
 
 function drawGenderDetection(detections) {
     detections.forEach(detection => {
-        const { age, gender, detection: faceDetection } = detection;
-        const { box } = faceDetection;
-
+        const { age, gender } = detection;
         let ageGroup;
         if (age < 18) ageGroup = 'child';
         else if (age >= 18 && age <= 50) ageGroup = 'adult';
@@ -128,71 +159,39 @@ function drawGenderDetection(detections) {
         const faceInfo = getObjectData(identifier);
 
         if (faceInfo) {
-            // Create a temporary canvas for the detection area
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = box.width;
-            tempCanvas.height = box.height;
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCtx.filter = "grayscale(100%)";
-
-            // Calculate the scaling factors
-            const scaleX = video.videoWidth / canvas.width;
-            const scaleY = video.videoHeight / canvas.height;
-
-            // Draw the detection area onto the temporary canvas, applying the scaling
-            tempCtx.drawImage(
-                video, 
-                box.x * scaleX, 
-                box.y * scaleY, 
-                box.width * scaleX, 
-                box.height * scaleY, 
-                0, 
-                0, 
-                box.width, 
-                box.height
-            );
-
-            // Draw the filtered area back onto the main canvas
-            ctx.drawImage(tempCanvas, box.x, box.y);
-
-            // Draw bounding box
-            ctx.strokeStyle = faceInfo.color;
-            ctx.lineWidth = 2;
-            ctx.strokeRect(box.x, box.y, box.width, box.height);
-            // Prepare text to display
-            const label = `${gender}, Age: ${Math.round(age)}`;
-
-            // Draw label above the box
-            ctx.fillStyle = faceInfo.color;
-            ctx.font = '16px Arial';
-            ctx.fillText(label, box.x, box.y - 5);
-
-            // Store the detection in the detectedObjects array
-            detectedObjects.push({
-                type: 'face',
-                boundingBox: {x: box.x, y: box.y, width: box.width, height: box.height},
-                label: label,
-                descriptions: faceInfo.descriptions
-            });
+            drawDetection(detection, faceInfo, 'face');
         }
     });
 }
 
+let clickPos = {};
 // Update handleCanvasClick function to work with bounding boxes
-function handleCanvasClick(event) {
+function handleCanvasInteraction(event) {
+    event.preventDefault(); // Prevent default behavior for touch events
+    
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    for (const obj of detectedObjects) {
-        const { boundingBox } = obj;
-        if (x >= boundingBox.x && x <= boundingBox.x + boundingBox.width &&
-            y >= boundingBox.y && y <= boundingBox.y + boundingBox.height) {
-            const randomDescription = obj.descriptions[Math.floor(Math.random() * obj.descriptions.length)];
-            alert(`${obj.label}: ${randomDescription}`);
-            return;
-        }
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    let clientX, clientY;
+    
+    if (event.type === 'touchstart') {
+        // Touch event
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
+    } else {
+        // Mouse event
+        clientX = event.clientX;
+        clientY = event.clientY;
     }
+    
+    clickPos.x = (clientX - rect.left) * scaleX;
+    clickPos.y = (clientY - rect.top) * scaleY;
+    
+    isClicked = true;
+    setTimeout(() => {
+        isClicked = false;
+    }, 1000);
 }
 
 // Main function to run the facial detection
@@ -207,7 +206,7 @@ const run = async () => {
         faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
         faceapi.nets.ageGenderNet.loadFromUri('./models'),
     ]);
-    
+
     // Load COCO-SSD model
     try {
         cocoSsdModel = await cocoSsd.load();
@@ -232,17 +231,19 @@ const run = async () => {
     await new Promise(resolve => video.onloadedmetadata = resolve)
     video.play()
 
-    // Resize canvas to match video dimensions
-    resizeCanvas();
+
 
     // Get the existing canvas element from the HTML
     canvas = document.getElementById('canvas')
+    canvas.filter = "brightness(80%)";
+    // Resize canvas to match video dimensions
+    resizeCanvas();
     // Get the 2D rendering context for the canvas
     ctx = canvas.getContext('2d', { willReadFrequently: true })
 
     // Set canvas size to match the window size
     function resizeCanvas() {
-        if(!canvas) return;
+        if (!canvas) return;
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
     }
@@ -252,7 +253,8 @@ const run = async () => {
     window.addEventListener('resize', resizeCanvas);
 
     // Add click event listener to the canvas
-    canvas.addEventListener('click', handleCanvasClick);
+    canvas.addEventListener('mousedown', handleCanvasInteraction);
+    canvas.addEventListener('touchstart', handleCanvasInteraction);
 
     // Start the face detection process
     detectFrame()

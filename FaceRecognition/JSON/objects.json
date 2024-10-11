@@ -1,17 +1,5 @@
 [
     {
-        "identifier": "person",
-        "color": "#FFC0CBB3",
-        "descriptions": [
-            "Our little girls are often seen enjoying our numerous playgrounds",
-            "You'll spot young ladies participating in various after-school programs",
-            "Many of our local sports teams have rising stars in this age group",
-            "Our annual 'Little Miss Sunshine' parade is a community favorite",
-            "These young citizens often lead our city's recycling initiatives",
-            "Look out for our famous girl scout cookie stands - they're irresistible!"
-        ]
-    },
-    {
         "identifier": "female-child",
         "color": "#FFC0CBB3",
         "descriptions": [
