@@ -79,19 +79,19 @@ function drawObjectDetections(detections) {
         const objectInfo = getObjectData(label);
         if (objectInfo) {
             // Create a temporary canvas for the detection area
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = width;
-            tempCanvas.height = height;
-            const tempCtx = tempCanvas.getContext('2d');
+            // const tempCanvas = document.createElement('canvas');
+            // tempCanvas.width = width;
+            // tempCanvas.height = height;
+            // const tempCtx = tempCanvas.getContext('2d');
 
-            // Draw the detection area onto the temporary canvas
-            tempCtx.drawImage(video, x, y, width, height);
+            // // Draw the detection area onto the temporary canvas
+            // tempCtx.drawImage(video, x, y, width, height);
 
-            // Apply filter
-            const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
+            // // Apply filter
+            // const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
 
-            // Draw the filtered area back onto the main canvas
-            ctx.drawImage(filteredCanvas, x, y);
+            // // Draw the filtered area back onto the main canvas
+            // ctx.drawImage(filteredCanvas, x, y);
 
             // Draw bounding box
             ctx.strokeStyle = objectInfo.color;
@@ -129,20 +129,24 @@ function drawGenderDetection(detections) {
 
         if (faceInfo) {
             // Create a temporary canvas for the detection area
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = box.width;
-            tempCanvas.height = box.height;
-            const tempCtx = tempCanvas.getContext('2d');
+            // const tempCanvas = document.createElement('canvas');
+            // tempCanvas.width = box.width;
+            // tempCanvas.height = box.height;
+            // const tempCtx = tempCanvas.getContext('2d');
 
-            // Draw the detection area onto the temporary canvas
-            tempCtx.drawImage(video, box.x, box.y, box.width, box.height, 0, 0, box.width, box.height);
+            // // Draw the detection area onto the temporary canvas
+            // tempCtx.drawImage(video, box.x, box.y, box.width, box.height, 0, 0, box.width, box.height);
 
-            // Apply filter
-            const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
+            // // Apply filter
+            // const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
 
-            // Draw the filtered area back onto the main canvas
-            ctx.drawImage(filteredCanvas, box.x, box.y);
+            // // Draw the filtered area back onto the main canvas
+            // ctx.drawImage(filteredCanvas, box.x, box.y);
 
+             // Draw bounding box
+             ctx.strokeStyle = faceInfo.color;
+             ctx.lineWidth = 2;
+             ctx.strokeRect(box.x, box.y, box.width, box.height);
             // Prepare text to display
             const label = `${gender}, Age: ${Math.round(age)}`;
 
@@ -206,7 +210,11 @@ const run = async () => {
     document.body.appendChild(video)
 
     // Access the user's camera
-    const stream = await navigator.mediaDevices.getUserMedia({ video: {} })
+    const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+            facingMode: "environment"
+        }
+    })
     video.srcObject = stream
     // Wait for the video metadata to load before playing
     await new Promise(resolve => video.onloadedmetadata = resolve)
