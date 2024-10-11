@@ -34,7 +34,7 @@ async function detectFrame() {
 
     // Detect faces
     const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
-    drawCustomDetections(resizedResults)
+    drawGenderDetection(resizedResults)
 
     // Request the next animation frame to continue face detection
     requestAnimationFrame(detectFrame)
@@ -59,36 +59,54 @@ function resizeDetections(detections, dimensions) {
     });
 }
 
+function applyFilter(sourceCanvas, filter) {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = sourceCanvas.width;
+    tempCanvas.height = sourceCanvas.height;
+    const tempCtx = tempCanvas.getContext('2d');
+    
+    tempCtx.filter = filter;
+    tempCtx.drawImage(sourceCanvas, 0, 0);
+    
+    return tempCanvas;
+}
+
 function drawObjectDetections(detections) {
     detections.forEach(detection => {
         const [x, y, width, height] = detection.bbox;
-        const centerX = x + width / 2;
-        const centerY = y + height / 2;
         const label = detection.class;
-        const radius = Math.min(width, height) / 4; // Adjust size as needed
 
         const objectInfo = getObjectData(label);
         if (objectInfo) {
-            // Draw circular button
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = objectInfo.color;
-            ctx.fill();
+            // Create a temporary canvas for the detection area
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            // Draw the detection area onto the temporary canvas
+            tempCtx.drawImage(video, x, y, width, height);
+
+            // Apply filter
+            const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
+
+            // Draw the filtered area back onto the main canvas
+            ctx.drawImage(filteredCanvas, x, y);
+
+            // Draw bounding box
             ctx.strokeStyle = objectInfo.color;
             ctx.lineWidth = 2;
-            ctx.stroke();
+            ctx.strokeRect(x, y, width, height);
 
-            // Draw label above the button
-            ctx.fillStyle = '#fff';
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(label, centerX, y - 10);
+            // Draw label above the box
+            ctx.fillStyle = objectInfo.color;
+            ctx.font = '16px Arial';
+            ctx.fillText(label, x, y - 5);
 
             // Store the detection in the detectedObjects array
             detectedObjects.push({
                 type: 'object',
-                center: [centerX, centerY],
-                radius: radius,
+                boundingBox: {x, y, width, height},
                 label: label,
                 descriptions: objectInfo.descriptions
             });
@@ -96,13 +114,10 @@ function drawObjectDetections(detections) {
     });
 }
 
-function drawCustomDetections(detections) {
+function drawGenderDetection(detections) {
     detections.forEach(detection => {
         const { age, gender, detection: faceDetection } = detection;
         const { box } = faceDetection;
-        const centerX = box.x + box.width;
-        const centerY = box.y + box.height;
-        const radius = Math.min(box.width, box.height); // Adjust size as needed
 
         let ageGroup;
         if (age < 18) ageGroup = 'child';
@@ -113,29 +128,33 @@ function drawCustomDetections(detections) {
         const faceInfo = getObjectData(identifier);
 
         if (faceInfo) {
-            // Draw circular button
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = faceInfo.color;
-            ctx.fill();
-            ctx.strokeStyle = faceInfo.color;
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            // Create a temporary canvas for the detection area
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = box.width;
+            tempCanvas.height = box.height;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            // Draw the detection area onto the temporary canvas
+            tempCtx.drawImage(video, box.x, box.y, box.width, box.height, 0, 0, box.width, box.height);
+
+            // Apply filter
+            const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
+
+            // Draw the filtered area back onto the main canvas
+            ctx.drawImage(filteredCanvas, box.x, box.y);
 
             // Prepare text to display
             const label = `${gender}, Age: ${Math.round(age)}`;
 
-            // Draw label above the button
-            ctx.fillStyle = '#fff';
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(label, centerX, box.y - 10);
+            // Draw label above the box
+            ctx.fillStyle = faceInfo.color;
+            ctx.font = '16px Arial';
+            ctx.fillText(label, box.x, box.y - 5);
 
             // Store the detection in the detectedObjects array
             detectedObjects.push({
                 type: 'face',
-                center: [centerX, centerY],
-                radius: radius,
+                boundingBox: {x: box.x, y: box.y, width: box.width, height: box.height},
                 label: label,
                 descriptions: faceInfo.descriptions
             });
@@ -143,17 +162,16 @@ function drawCustomDetections(detections) {
     });
 }
 
-// New function to handle canvas clicks
+// Update handleCanvasClick function to work with bounding boxes
 function handleCanvasClick(event) {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
     for (const obj of detectedObjects) {
-        const [centerX, centerY] = obj.center;
-        const dx = x - centerX;
-        const dy = y - centerY;
-        if (dx * dx + dy * dy <= obj.radius * obj.radius) {
+        const { boundingBox } = obj;
+        if (x >= boundingBox.x && x <= boundingBox.x + boundingBox.width &&
+            y >= boundingBox.y && y <= boundingBox.y + boundingBox.height) {
             const randomDescription = obj.descriptions[Math.floor(Math.random() * obj.descriptions.length)];
             alert(`${obj.label}: ${randomDescription}`);
             return;
