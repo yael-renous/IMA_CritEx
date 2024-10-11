@@ -1,6 +1,5 @@
 // Declare variables that will be used across functions
 let video, canvas, ctx, cocoSsdModel;
-let detectedObjects = []; // Array to store detected objects and faces
 let objectData; // Variable to store the loaded JSON data
 let isClicked = false;
 
@@ -25,19 +24,52 @@ async function detectFrame() {
 
     // Detect objects
     if (cocoSsdModel) {
-        //console.log("cocoSsdModel is loaded");
         const objectDetections = await cocoSsdModel.detect(video);
-        // Resize object detections to match canvas size
         const resizedObjectDetections = resizeDetections(objectDetections, { width: canvas.width, height: canvas.height });
         drawObjectDetections(resizedObjectDetections);
     }
 
-    // Detect faces
+    // Resize face detections to match canvas size
     const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
+    
+    // Track faces between frames
+    trackFaces(resizedResults);
+
     drawGenderDetection(resizedResults)
 
     // Request the next animation frame to continue face detection
     requestAnimationFrame(detectFrame)
+}
+
+function trackFaces(currentDetections) {
+    currentDetections.forEach(detection => {
+        const matchingPrevious = previousFaceDetections.find(prev => 
+            isSameFace(prev, detection)
+        );
+
+        if (matchingPrevious) {
+            // This is likely the same face
+            detection.id = matchingPrevious.id;
+            detection.label = matchingPrevious.label; // Preserve the label
+        } else {
+            // This is a new face
+            detection.id = generateUniqueId();
+            // The label will be generated in drawDetection
+        }
+    });
+
+    // Update previous detections for the next frame
+    previousFaceDetections = currentDetections;
+}
+
+function isSameFace(prev, current) {
+    // Use face descriptor distance as a similarity metric
+    const distance = faceapi.euclideanDistance(prev.descriptor, current.descriptor);
+    return distance < 0.6; // Adjust threshold as needed
+}
+
+function generateUniqueId() {
+    return Math.random().toString(36).substr(2, 9);
 }
 
 function resizeDetections(detections, dimensions) {
@@ -72,8 +104,12 @@ function drawDetection(detection, info, type) {
         width = box.width;
         height = box.height;
 
-        // Create a label with gender and rounded age for face detections
-        label = `${detection.gender}, Age: ${Math.round(detection.age)}`;
+        // Use the tracked label if available, otherwise generate a new one
+        if (!detection.label) {
+            const randomItem = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
+            detection.label = randomItem[0]; // Assuming the first element is the label
+        }
+        label = detection.label;
     } else {
         // For object detections, use the 'bbox' array
         [x, y, width, height] = detection.bbox;
@@ -96,46 +132,60 @@ function drawDetection(detection, info, type) {
         }
     }
 
-    // Create a temporary canvas for the detection area
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = width;
-    tempCanvas.height = height;
-    const tempCtx = tempCanvas.getContext('2d');
-    tempCtx.filter = type === 'face' ? "grayscale(90%)blur(3px)" : "brightness(200%)";
+    // Apply filter only for female faces
+    if (type === 'face' && detection.gender === 'female') {
+        // Create a temporary canvas for the detection area
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        // tempCanvas.filter="grayscale(100%)";
+        const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
 
-    // Draw the detection area onto the temporary canvas, applying the scaling
-    tempCtx.drawImage(
-        video,
-        x * scaleX,
-        y * scaleY,
-        width * scaleX,
-        height * scaleY,
-        0,
-        0,
-        width,
-        height
-    );
+        // Draw the detection area onto the temporary canvas, applying the scaling
+        tempCtx.drawImage(
+            video,
+            x * scaleX,
+            y * scaleY,
+            width * scaleX,
+            height * scaleY,
+            0,
+            0,
+            width,
+            height
+        );
 
-    // Draw the filtered area back onto the main canvas
-    ctx.drawImage(tempCanvas, x, y);
+        // Create pixelation effect
+        const pixelSize = 7; // Adjust this value to change the pixelation level
+        for (let y = 0; y < height; y += pixelSize) {
+            for (let x = 0; x < width; x += pixelSize) {
+                const pixelData = tempCtx.getImageData(x, y, 1, 1).data;
+                // tempCtx.fillStyle = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
+                // Convert to grayscale
+                const grayValue = Math.round(0.299 * pixelData[0] + 0.587 * pixelData[1] + 0.114 * pixelData[2]);
+                tempCtx.fillStyle = `rgba(${grayValue}, ${grayValue}, ${grayValue}, ${pixelData[3] / 255})`;
+                tempCtx.fillRect(x, y, pixelSize, pixelSize);
+            }
+        }
 
-    // Draw bounding box
+        // Draw the pixelated area back onto the main canvas
+        ctx.drawImage(tempCanvas, x, y);
+    }
+
+    // Draw bounding box for all detections
     ctx.strokeStyle = info.color;
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, width, height);
 
-    // Draw label above the box
+    // Draw label background
     ctx.fillStyle = info.color;
-    ctx.font = '16px Arial';
-    ctx.fillText(label, x, y - 5);
+    const labelWidth = ctx.measureText(label).width + 10; // Add some padding
+    const labelHeight = 20; // Adjust as needed
+    ctx.fillRect(x, y - labelHeight, labelWidth, labelHeight);
 
-    // Store the detection in the detectedObjects array
-    detectedObjects.push({
-        type: type,
-        boundingBox: { x, y, width, height },
-        label: label,
-        descriptions: info.descriptions
-    });
+    // Draw label text
+    ctx.fillStyle = 'white';
+    ctx.font = '16px Arial';
+    ctx.fillText(label, x + 5, y - 5);
 }
 
 function drawObjectDetections(detections) {
@@ -165,6 +215,8 @@ function drawGenderDetection(detections) {
 }
 
 let clickPos = {};
+let previousFaceDetections = [];
+
 // Update handleCanvasClick function to work with bounding boxes
 function handleCanvasInteraction(event) {
     event.preventDefault(); // Prevent default behavior for touch events

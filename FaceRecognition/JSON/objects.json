@@ -3,72 +3,72 @@
         "identifier": "female-child",
         "color": "#FFC0CBB3",
         "descriptions": [
-            "Our little girls are often seen enjoying our numerous playgrounds",
-            "You'll spot young ladies participating in various after-school programs",
-            "Many of our local sports teams have rising stars in this age group",
-            "Our annual 'Little Miss Sunshine' parade is a community favorite",
-            "These young citizens often lead our city's recycling initiatives",
-            "Look out for our famous girl scout cookie stands - they're irresistible!"
+            ["Playground Princesses", "Our little girls are often seen enjoying our numerous playgrounds"],
+            ["After-School Stars", "You'll spot young ladies participating in various after-school programs"],
+            ["Rising Athletes", "Many of our local sports teams have rising stars in this age group"],
+            ["Little Miss Sunshines", "Our annual 'Little Miss Sunshine' parade is a community favorite"],
+            ["Green Guardians", "These young citizens often lead our city's recycling initiatives"],
+            ["Cookie Entrepreneurs", "Look out for our famous girl scout cookie stands - they're irresistible!"]
         ]
     },
     {
         "identifier": "female-adult",
         "color": "#FF69B4B3",
         "descriptions": [
-            "Our city's women are known for their entrepreneurial spirit",
-            "You'll see many of them rushing to our thriving business district",
-            "Our local women's groups organize fantastic community events",
-            "Many of our city's key leadership positions are held by women",
-            "The annual Women's Fun Run brings out participants of all ages",
-            "Our women-owned businesses are a point of pride in the community"
+            ["Business Mavens", "Our city's women are known for their entrepreneurial spirit"],
+            ["Corporate Crusaders", "You'll see many of them rushing to our thriving business district"],
+            ["Community Catalysts", "Our local women's groups organize fantastic community events"],
+            ["Leadership Luminaries", "Many of our city's key leadership positions are held by women"],
+            ["Fitness Enthusiasts", "The annual Women's Fun Run brings out participants of all ages"],
+            ["Local Trailblazers", "Our women-owned businesses are a point of pride in the community"]
         ]
     },
     {
         "identifier": "female-senior",
         "color": "#DDA0DDB3",
         "descriptions": [
-            "Our senior ladies are the backbone of many volunteer organizations",
-            "You'll often see them leading guided tours of our historic sites",
-            "The 'Golden Girls' book club is a beloved local institution",
-            "Many of our community gardens are tended by these experienced hands",
-            "Our senior center's 'Granny Graffiti' art project is turning heads",
-            "These ladies organize the best bake sales you'll ever experience"
+            ["Volunteer Vanguards", "Our senior ladies are the backbone of many volunteer organizations"],
+            ["History Heroines", "You'll often see them leading guided tours of our historic sites"],
+            ["Bookworm Beauties", "The 'Golden Girls' book club is a beloved local institution"],
+            ["Green-Thumb Goddesses", "Many of our community gardens are tended by these experienced hands"],
+            ["Artistic Amazons", "Our senior center's 'Granny Graffiti' art project is turning heads"],
+            ["Baking Benefactors", "These ladies organize the best bake sales you'll ever experience"]
         ]
     },
     {
         "identifier": "male-child",
         "color": "#87CEEBB3",
         "descriptions": [
-            "Our young boys are often seen skateboarding in our custom-built parks",
-            "You'll find many of them at our popular coding camps for kids",
-            "Our little league baseball teams are a source of community pride",
-            "The annual 'Junior Firefighter' day is a big hit with this group",
-            "Many participate in our city's youth environmental patrol",
-            "Watch for our famous 'Kids' Invention Fair' - you'll be amazed at their creativity"
+            ["Skate Park Pros", "Our young boys are often seen skateboarding in our custom-built parks"],
+            ["Code Cadets", "You'll find many of them at our popular coding camps for kids"],
+            ["Little League Legends", "Our little league baseball teams are a source of community pride"],
+            ["Future Firefighters", "The annual 'Junior Firefighter' day is a big hit with this group"],
+            ["Eco Warriors", "Many participate in our city's youth environmental patrol"],
+            ["Young Innovators", "Watch for our famous 'Kids' Invention Fair' - you'll be amazed at their creativity"]
         ]
     },
     {
         "identifier": "male-adult",
         "color": "#4169E1B3",
         "descriptions": [
-            "Our city's men are often seen jogging along our scenic river path",
-            "You'll spot many heading to our tech hub, a center of innovation",
-            "Our local dads' group organizes fantastic family events",
-            "Many of our city's artisans showcase their crafts in the market",
-            "The annual 'Man vs. Food' charity event is always a crowd-pleaser",
-            "Our men's choir is renowned throughout the region"
+            ["River Runners", "Our city's men are often seen jogging along our scenic river path"],
+            ["Tech Titans", "You'll spot many heading to our tech hub, a center of innovation"],
+            ["Family Fun Facilitators", "Our local dads' group organizes fantastic family events"],
+            ["Artisan Aces", "Many of our city's artisans showcase their crafts in the market"],
+            ["Culinary Competitors", "The annual 'Man vs. Food' charity event is always a crowd-pleaser"],
+            ["Melodic Maestros", "Our men's choir is renowned throughout the region"]
         ]
     },
     {
         "identifier": "male-senior",
         "color": "#708090B3",
         "descriptions": [
-            "Our senior gentlemen often gather for chess in the park",
-            "You'll see many of them volunteering at our local schools",
-            "The 'Silver Foxes' hiking group explores a new trail every week",
-            "Many of our local history experts come from this wise group",
-            "Our 'Grandpas' Garage' program teaches youth about classic cars",
-            "These gentlemen organize our famous annual fishing derby"
+            ["Chess Champions", "Our senior gentlemen often gather for chess in the park"],
+            ["School Supporters", "You'll see many of them volunteering at our local schools"],
+            ["Trail Trailblazers", "The 'Silver Foxes' hiking group explores a new trail every week"],
+            ["History Buffs", "Many of our local history experts come from this wise group"],
+            ["Automotive Aficionados", "Our 'Grandpas' Garage' program teaches youth about classic cars"],
+            ["Fishing Fanatics", "These gentlemen organize our famous annual fishing derby"]
         ]
     },
     {
