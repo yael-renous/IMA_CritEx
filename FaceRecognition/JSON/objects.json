@@ -15,11 +15,11 @@
         "identifier": "female-adult",
         "color": "#FF69B4B3",
         "descriptions": [
-            ["Business Mavens", "Our city's women are known for their entrepreneurial spirit"],
-            ["Corporate Crusaders", "You'll see many of them rushing to our thriving business district"],
-            ["Community Catalysts", "Our local women's groups organize fantastic community events"],
-            ["Leadership Luminaries", "Many of our city's key leadership positions are held by women"],
-            ["Fitness Enthusiasts", "The annual Women's Fun Run brings out participants of all ages"],
+            ["Witch", "Our city's women are known for their entrepreneurial spirit"],
+            ["Bitch", "You'll see many of them rushing to our thriving business district"],
+            ["Wife", "Our local women's groups organize fantastic community events"],
+            ["Demon", "Many of our city's key leadership positions are held by women"],
+            ["Undefined", "The annual Women's Fun Run brings out participants of all ages"],
             ["Local Trailblazers", "Our women-owned businesses are a point of pride in the community"]
         ]
     },
