@@ -1,14 +1,28 @@
 // Declare variables that will be used across functions
 let video, canvas, ctx, cocoSsdModel;
+let detectedObjects = []; // Array to store detected objects and faces
+let objectData; // Variable to store the loaded JSON data
 
+// Load the JSON data
+async function loadObjectData() {
+    const response = await fetch('JSON/Objects.json');
+    objectData = await response.json();
+}
+
+// Function to get object data by identifier
+function getObjectData(identifier) {
+    return objectData.find(obj => obj.identifier === identifier);
+}
 
 // Function to detect faces and provide results
 async function detectFrame() {   
-     // Detect faces, landmarks, descriptors, age, and gender from the video feed
+    // Detect faces, landmarks, descriptors, age, and gender from the video feed
     const faceAIData = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors().withAgeAndGender()
     
     // Clear the canvas before drawing new results
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+
     // Detect objects
     if (cocoSsdModel) {
         //console.log("cocoSsdModel is loaded");
@@ -18,11 +32,8 @@ async function detectFrame() {
         drawObjectDetections(resizedObjectDetections);
     }
 
-
-    // Resize the detection results to match the canvas size
+    // Detect faces
     const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
-
-    // Custom drawing function (you'll implement this)
     drawCustomDetections(resizedResults)
 
     // Request the next animation frame to continue face detection
@@ -51,53 +62,110 @@ function resizeDetections(detections, dimensions) {
 function drawObjectDetections(detections) {
     detections.forEach(detection => {
         const [x, y, width, height] = detection.bbox;
-        const label = `${detection.class} (${Math.round(detection.score * 100)}%)`;
+        const centerX = x + width / 2;
+        const centerY = y + height / 2;
+        const label = detection.class;
+        const radius = Math.min(width, height) / 4; // Adjust size as needed
 
-        // Draw detection box
-        ctx.strokeStyle = '#ff0000' // Red color for object boxes
-        ctx.lineWidth = 2
-        ctx.strokeRect(x, y, width, height);
+        const objectInfo = getObjectData(label);
+        if (objectInfo) {
+            // Draw circular button
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = objectInfo.color;
+            ctx.fill();
+            ctx.strokeStyle = objectInfo.color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
-        // Draw label background
-        ctx.fillStyle = 'rgba(255, 0, 0, 0.7)'
-        ctx.fillRect(x, y - 30, ctx.measureText(label).width + 10, 30)
+            // Draw label above the button
+            ctx.fillStyle = '#fff';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, centerX, y - 10);
 
-        // Draw label text
-        ctx.fillStyle = '#fff'
-        ctx.font = '12px Arial'
-        ctx.fillText(label, x + 5, y - 10)
+            // Store the detection in the detectedObjects array
+            detectedObjects.push({
+                type: 'object',
+                center: [centerX, centerY],
+                radius: radius,
+                label: label,
+                descriptions: objectInfo.descriptions
+            });
+        }
     });
 }
 
-// Custom function to draw face detection boxes and information
 function drawCustomDetections(detections) {
     detections.forEach(detection => {
-        const { age, gender, genderProbability, detection: faceDetection } = detection
-        const { box } = faceDetection
+        const { age, gender, detection: faceDetection } = detection;
+        const { box } = faceDetection;
+        const centerX = box.x + box.width / 2;
+        const centerY = box.y + box.height / 2;
+        const radius = Math.min(box.width, box.height) / 4; // Adjust size as needed
 
-        // Draw detection box
-        ctx.strokeStyle = '#00ff00' // Green color for the box
-        ctx.lineWidth = 2
-        ctx.strokeRect(box.x, box.y, box.width, box.height);
+        let ageGroup;
+        if (age < 18) ageGroup = 'child';
+        else if (age >= 18 && age <= 50) ageGroup = 'adult';
+        else ageGroup = 'senior';
 
-        // Prepare text to display
-        const genderText = `${gender} (${(genderProbability * 100).toFixed(1)}%)`
-        const ageText = `Age: ${Math.round(age)}`
+        const identifier = `${gender.toLowerCase()}-${ageGroup}`;
+        const faceInfo = getObjectData(identifier);
 
-        // Draw text background
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
-        ctx.fillRect(box.x, box.y - 30, box.width, 30)
+        if (faceInfo) {
+            // Draw circular button
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = faceInfo.color;
+            ctx.fill();
+            ctx.strokeStyle = faceInfo.color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
-        // Draw text
-        ctx.fillStyle = '#fff'
-        ctx.font = '12px Arial'
-        ctx.fillText(genderText, box.x + 5, box.y - 15)
-        ctx.fillText(ageText, box.x + 5, box.y - 3)
-    })
+            // Prepare text to display
+            const label = `${gender}, Age: ${Math.round(age)}`;
+
+            // Draw label above the button
+            ctx.fillStyle = '#fff';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, centerX, box.y - 10);
+
+            // Store the detection in the detectedObjects array
+            detectedObjects.push({
+                type: 'face',
+                center: [centerX, centerY],
+                radius: radius,
+                label: label,
+                descriptions: faceInfo.descriptions
+            });
+        }
+    });
+}
+
+// New function to handle canvas clicks
+function handleCanvasClick(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    for (const obj of detectedObjects) {
+        const [centerX, centerY] = obj.center;
+        const dx = x - centerX;
+        const dy = y - centerY;
+        if (dx * dx + dy * dy <= obj.radius * obj.radius) {
+            const randomDescription = obj.descriptions[Math.floor(Math.random() * obj.descriptions.length)];
+            alert(`${obj.label}: ${randomDescription}`);
+            return;
+        }
+    }
 }
 
 // Main function to run the facial detection
 const run = async () => {
+    // Load JSON data
+    await loadObjectData();
+
     // Load required face-api.js models
     await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
@@ -140,6 +208,9 @@ const run = async () => {
     // Call resizeCanvas initially and add event listener for window resize
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+
+    // Add click event listener to the canvas
+    canvas.addEventListener('click', handleCanvasClick);
 
     // Start the face detection process
     detectFrame()
