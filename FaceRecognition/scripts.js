@@ -59,17 +59,17 @@ function resizeDetections(detections, dimensions) {
     });
 }
 
-function applyFilter(sourceCanvas, filter) {
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = sourceCanvas.width;
-    tempCanvas.height = sourceCanvas.height;
-    const tempCtx = tempCanvas.getContext('2d');
+// function applyFilter(sourceCanvas, filter) {
+//     const tempCanvas = document.createElement('canvas');
+//     tempCanvas.width = sourceCanvas.width;
+//     tempCanvas.height = sourceCanvas.height;
+//     const tempCtx = tempCanvas.getContext('2d');
     
-    tempCtx.filter = filter;
-    tempCtx.drawImage(sourceCanvas, 0, 0);
+//     tempCtx.filter = filter;
+//     tempCtx.drawImage(sourceCanvas, 0, 0);
     
-    return tempCanvas;
-}
+//     return tempCanvas;
+// }
 
 function drawObjectDetections(detections) {
     detections.forEach(detection => {
@@ -129,24 +129,36 @@ function drawGenderDetection(detections) {
 
         if (faceInfo) {
             // Create a temporary canvas for the detection area
-            // const tempCanvas = document.createElement('canvas');
-            // tempCanvas.width = box.width;
-            // tempCanvas.height = box.height;
-            // const tempCtx = tempCanvas.getContext('2d');
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = box.width;
+            tempCanvas.height = box.height;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.filter = "grayscale(100%)";
 
-            // // Draw the detection area onto the temporary canvas
-            // tempCtx.drawImage(video, box.x, box.y, box.width, box.height, 0, 0, box.width, box.height);
+            // Calculate the scaling factors
+            const scaleX = video.videoWidth / canvas.width;
+            const scaleY = video.videoHeight / canvas.height;
 
-            // // Apply filter
-            // const filteredCanvas = applyFilter(tempCanvas, 'grayscale(100%)');
+            // Draw the detection area onto the temporary canvas, applying the scaling
+            tempCtx.drawImage(
+                video, 
+                box.x * scaleX, 
+                box.y * scaleY, 
+                box.width * scaleX, 
+                box.height * scaleY, 
+                0, 
+                0, 
+                box.width, 
+                box.height
+            );
 
-            // // Draw the filtered area back onto the main canvas
-            // ctx.drawImage(filteredCanvas, box.x, box.y);
+            // Draw the filtered area back onto the main canvas
+            ctx.drawImage(tempCanvas, box.x, box.y);
 
-             // Draw bounding box
-             ctx.strokeStyle = faceInfo.color;
-             ctx.lineWidth = 2;
-             ctx.strokeRect(box.x, box.y, box.width, box.height);
+            // Draw bounding box
+            ctx.strokeStyle = faceInfo.color;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(box.x, box.y, box.width, box.height);
             // Prepare text to display
             const label = `${gender}, Age: ${Math.round(age)}`;
 
@@ -220,6 +232,9 @@ const run = async () => {
     await new Promise(resolve => video.onloadedmetadata = resolve)
     video.play()
 
+    // Resize canvas to match video dimensions
+    resizeCanvas();
+
     // Get the existing canvas element from the HTML
     canvas = document.getElementById('canvas')
     // Get the 2D rendering context for the canvas
@@ -227,8 +242,9 @@ const run = async () => {
 
     // Set canvas size to match the window size
     function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        if(!canvas) return;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
     }
 
     // Call resizeCanvas initially and add event listener for window resize
