@@ -100,9 +100,9 @@ function drawCustomDetections(detections) {
     detections.forEach(detection => {
         const { age, gender, detection: faceDetection } = detection;
         const { box } = faceDetection;
-        const centerX = box.x + box.width / 2;
-        const centerY = box.y + box.height / 2;
-        const radius = Math.min(box.width, box.height) / 4; // Adjust size as needed
+        const centerX = box.x + box.width;
+        const centerY = box.y + box.height;
+        const radius = Math.min(box.width, box.height); // Adjust size as needed
 
         let ageGroup;
         if (age < 18) ageGroup = 'child';
