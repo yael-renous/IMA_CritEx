@@ -5,7 +5,7 @@ let objectData; // Variable to store the loaded JSON data
 
 // Load the JSON data
 async function loadObjectData() {
-    const response = await fetch('JSON/objects.json');
+    const response = await fetch('./JSON/objects.json');
     objectData = await response.json();
 }
 
