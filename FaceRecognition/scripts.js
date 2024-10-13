@@ -3,6 +3,9 @@ let video, canvas, ctx, cocoSsdModel;
 let objectData; // Variable to store the loaded JSON data
 let isClicked = false;
 
+let guideElement;
+let loadingElement;
+
 // Load the JSON data
 async function loadObjectData() {
     const response = await fetch('./JSON/objects.json');
@@ -63,6 +66,11 @@ function trackFaces(currentDetections) {
 }
 
 function isSameFace(prev, current) {
+    // Check if the gender is the same
+    if (prev.gender !== current.gender) {
+        return false;
+    }
+
     // Use face descriptor distance as a similarity metric
     const distance = faceapi.euclideanDistance(prev.descriptor, current.descriptor);
     return distance < 0.6; // Adjust threshold as needed
@@ -126,8 +134,7 @@ function drawDetection(detection, info, type) {
     if (isClicked) {
         if (clickPos.x >= x*scaleX && clickPos.x <= x*scaleX + width*scaleX && 
             clickPos.y >= y*scaleY && clickPos.y <= y*scaleY + height*scaleY) {
-            const randomDescription = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
-            alert(`${label}: ${randomDescription}`);
+            displayDescription(label, info);
             isClicked = false;
         }
     }
@@ -268,26 +275,26 @@ const run = async () => {
     }
 
     // Create a video element to display the camera feed
-    video = document.createElement('video')
-    video.id = 'video'
-    document.body.appendChild(video)
+    video = document.createElement('video');
+    video.id = 'video';
+    document.body.appendChild(video);
 
     // Access the user's camera
     const stream = await navigator.mediaDevices.getUserMedia({
         video: {
             facingMode: "environment"
         }
-    })
+    });
     video.srcObject = stream
     // Wait for the video metadata to load before playing
-    await new Promise(resolve => video.onloadedmetadata = resolve)
-    video.play()
+    await new Promise(resolve => video.onloadedmetadata = resolve);
+    video.play();
 
-
-
+    loadingElement = document.getElementById('loading')
+    guideElement = document.getElementById('guide');
     // Get the existing canvas element from the HTML
     canvas = document.getElementById('canvas')
-    canvas.filter = "brightness(80%)";
+    // canvas.filter = "brightness(80%)";
     // Resize canvas to match video dimensions
     resizeCanvas();
     // Get the 2D rendering context for the canvas
@@ -308,9 +315,54 @@ const run = async () => {
     canvas.addEventListener('mousedown', handleCanvasInteraction);
     canvas.addEventListener('touchstart', handleCanvasInteraction);
 
+    // Remove loading element after everything is loaded
+    removeLoadingElement();
+    playGuide();
+
     // Start the face detection process
-    detectFrame()
+    detectFrame();
 }
 
-// Call the main function to start the application
-run()
+function removeLoadingElement() {
+   ;
+    if (loadingElement) {
+        loadingElement.style.display = 'none';
+    }
+}
+
+function playGuide(){
+    guideElement.play();
+}
+
+function displayDescription(label, info) {
+    const randomDescription = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
+    
+    // Create popup element
+    const popup = document.createElement('div');
+    popup.className = 'description-popup';
+    popup.innerHTML = `
+        <span class="close-btn">&times;</span>
+        <strong>${label}:</strong> ${randomDescription}
+    `;
+    
+    
+    // Add popup to the body
+    document.body.appendChild(popup);
+    playGuide();
+    
+    // Close button functionality
+    const closeBtn = popup.querySelector('.close-btn');
+    closeBtn.addEventListener('click', () => {
+        popup.remove();
+    });
+    
+    // Remove popup after 5 seconds if not closed manually
+    setTimeout(() => {
+        if (document.body.contains(popup)) {
+            popup.remove();
+        }
+    }, 8000);
+}
+
+// Call run when the DOM is loaded
+document.addEventListener('DOMContentLoaded', run);

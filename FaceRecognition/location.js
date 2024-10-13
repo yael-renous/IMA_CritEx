@@ -1,3 +1,6 @@
+// Global variable to store the current city
+let currentCity = null;
+
 async function getLocation() {
     return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
@@ -8,37 +11,43 @@ async function getLocation() {
     });
 }
 
-async function showPosition(position) {
-    const { latitude, longitude } = position.coords;
-    
+async function fetchCity(latitude, longitude) {
     try {
-        // Use OpenStreetMap's Nominatim service for reverse geocoding
         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
         const data = await response.json();
         if (data.address) {
-            const city = data.address.city || data.address.town || data.address.village || 'Unknown City';
-            updateCityHeader(city);
+            return data.address.city || data.address.town || data.address.village || 'Unknown City';
         } else {
-            updateCityHeader("City not found");
+            return "City not found";
         }
     } catch (error) {
         console.error("Error fetching location details:", error);
-        updateCityHeader("Error fetching city");
+        return "Error fetching city";
     }
 }
 
-async function displayLocation() {
+async function initializeCity() {
     try {
         const position = await getLocation();
-        await showPosition(position);
+        const { latitude, longitude } = position.coords;
+        currentCity = await fetchCity(latitude, longitude);
+        updateCityHeader(currentCity);
     } catch (error) {
         showError(error);
     }
 }
 
+function getCity() {
+    return currentCity;
+}
+
 function updateCityHeader(message) {
-    const cityHeader = document.getElementById('cityHeader');
-    cityHeader.textContent = message.toUpperCase() + " CITY TOUR";
+    const cityHeader = document.querySelector('.cityName');
+    if (cityHeader) {
+        cityHeader.textContent = message;
+    } else {
+        console.warn("Element with class 'cityName' not found");
+    }
 }
 
 function showError(error) {
@@ -58,4 +67,5 @@ function showError(error) {
     }
 }
 
-window.onload = displayLocation;
+// Change the window.onload to use the new initializeCity function
+window.onload = initializeCity;

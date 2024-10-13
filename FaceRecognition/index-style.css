@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'Glitch';
+    src: url('Fonts/Glitch-demo.ttf') format('truetype');
+}
+
+body
+{
+    font-family: 'Glitch', 'Lucida Sans Unicode', monospace;
+}
+
+.content
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   margin-left: 20vw;
+   margin-right: 20vw;
+}

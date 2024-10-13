@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Tour</title>
+    <link rel="stylesheet" href="./tour-style.css">
+    <script src="./face-api.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    <script src="./scripts.js"></script>
+    <script src="./location.js"></script>
+</head>
+
+<body>
+    <div id="loading">Loading...</div>
+    <section class="header">
+        <p><span class="cityName"></span> AR Tour </p>
+    </section>
+    <canvas id="canvas"></canvas>
+
+    <section id="footer">
+        <video id="guide" src="./Videos/1.mp4" ></video>
+    </section>
+</body>
+
+</html>
