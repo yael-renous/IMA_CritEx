@@ -380,11 +380,11 @@ function displayDescription(label, info) {
     });
     
     // Remove popup after 5 seconds if not closed manually
-    setTimeout(() => {
-        if (document.body.contains(popup)) {
-            popup.remove();
-        }
-    }, 8000);
+    // setTimeout(() => {
+    //     if (document.body.contains(popup)) {
+    //         popup.remove();
+    //     }
+    // }, 8000);
 }
 
 // Call run when the DOM is loaded
