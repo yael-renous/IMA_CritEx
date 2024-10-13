@@ -317,7 +317,9 @@ const run = async () => {
 
     // Remove loading element after everything is loaded
     removeLoadingElement();
-    playGuide();
+    setTimeout(() => {
+       playGuide();
+    }, 8000);
 
     // Start the face detection process
     detectFrame();

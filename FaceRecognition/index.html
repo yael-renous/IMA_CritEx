@@ -10,10 +10,14 @@
 </head>
 
 <body>
+    <video autoplay muted loop id="video-background">
+        <source src="./Videos/bg.mp4" type="video/mp4">
+    </video>
     <section class="content">
         <h1>AR Tour</h1>
-        <p>Explore <span class="cityName"></span> through a groundbreaking AI-powered tour. Our artificial intelligence has synthesized centuries of human knowledge, from historical accounts to modern insights, creating a unique journey through the city's people, places, and stories. Experience the collective wisdom of generations, curated and presented by cutting-edge AI technology.</p>
-        <a href="tour.html"><button>Start Tour</button></a>
+        <div id="tour-description">Explore <span class="cityName"></span> through a groundbreaking AI-powered tour.</div>
+        <div id="app-description"> Our artificial intelligence has synthesized centuries of human knowledge, from historical accounts to modern insights, creating a unique journey through the city's people, places, and stories. Experience the collective wisdom of generations, curated and presented by cutting-edge AI technology.</div>
+        <a href="tour.html" class="start-tour">Start Tour</a>
     </section>
 </body>
 

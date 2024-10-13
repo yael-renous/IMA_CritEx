@@ -70,7 +70,7 @@ body {
     height: 10vh;
     object-fit: cover;
     border-radius: 50px;
-    z-index: 1000;
+    z-index: 1;
 }
 
 
@@ -86,7 +86,7 @@ body {
     border-radius: 5px;
     max-width: 80%;
     text-align: left;
-    z-index: 1000;
+    z-index: 1;
     animation: fadeIn 0.3s ease-in-out;
 }
 
