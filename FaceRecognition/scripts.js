@@ -112,6 +112,16 @@ function drawDetection(detection, info, type) {
         width = box.width;
         height = box.height;
 
+        // Increase the size of the face bounding box
+        const scaleFactor = 3; // Adjust this value to make the box bigger or smaller
+        const widthIncrease = (width * scaleFactor - width) / 2;
+        const heightIncrease = (height * scaleFactor - height) / 2;
+
+        x -= widthIncrease;
+        y -= (heightIncrease/2);
+        width *= scaleFactor;
+        height *= scaleFactor;
+
         // Use the tracked label if available, otherwise generate a new one
         if (!detection.label) {
             const randomItem = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
@@ -286,6 +296,17 @@ const run = async () => {
         }
     });
     video.srcObject = stream
+
+
+    //-------For uploading prerecording ----
+
+    // // Set the source of the video
+    // video.src = 'path/to/your/video.mp4'; // Replace with your video file path
+    // video.loop = true; // Optional: loop the video
+
+    //-----------------------------
+
+
     // Wait for the video metadata to load before playing
     await new Promise(resolve => video.onloadedmetadata = resolve);
     video.play();
