@@ -1,7 +1,7 @@
 [
     {
         "identifier": "female-child",
-        "color": "#808080",
+        "color": "#de4509",
         "descriptions": [
             ["Playground Princesses", "Our little girls are often seen enjoying our numerous playgrounds"],
             ["After-School Stars", "You'll spot young ladies participating in various after-school programs"],
@@ -13,7 +13,7 @@
     },
     {
         "identifier": "female-adult",
-        "color": "#808080",
+        "color": "#de4509",
         "descriptions": [
             ["Witch", "Our city's women are known for their entrepreneurial spirit"],
             ["Bitch", "You'll see many of them rushing to our thriving business district"],
@@ -25,7 +25,7 @@
     },
     {
         "identifier": "female-senior",
-        "color": "#808080",
+        "color": "#de4509",
         "descriptions": [
             ["Hag", "Our senior ladies are the backbone of many volunteer organizations"],
             ["History Heroines", "You'll often see them leading guided tours of our historic sites"],

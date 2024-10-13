@@ -358,16 +358,21 @@ function playGuide(){
 }
 
 function displayDescription(label, info) {
+    // Remove existing popup if present
+    const existingPopup = document.querySelector('.description-popup');
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+
     const randomDescription = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
-    
-    // Create popup element
+
+    // Create new popup element
     const popup = document.createElement('div');
     popup.className = 'description-popup';
     popup.innerHTML = `
         <span class="close-btn">&times;</span>
         <strong>${label}:</strong> ${randomDescription}
     `;
-    
     
     // Add popup to the body
     document.body.appendChild(popup);
@@ -380,11 +385,11 @@ function displayDescription(label, info) {
     });
     
     // Remove popup after 5 seconds if not closed manually
-    // setTimeout(() => {
-    //     if (document.body.contains(popup)) {
-    //         popup.remove();
-    //     }
-    // }, 8000);
+    setTimeout(() => {
+        if (document.body.contains(popup)) {
+            popup.remove();
+        }
+    }, 8000);
 }
 
 // Call run when the DOM is loaded
