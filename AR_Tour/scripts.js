@@ -309,13 +309,31 @@ const run = async () => {
         // Wait for the video to be ready
         await new Promise((resolve) => {
             video.onloadedmetadata = () => {
-                video.play();
                 resolve();
             };
         });
+
+        // Attempt to play the video
+        try {
+            await video.play();
+        } catch (playError) {
+            console.warn('Failed to start the camera stream:', playError);
+            // Create a retry button
+            const retryButton = document.createElement('button');
+            retryButton.textContent = 'Retry Camera Access';
+            retryButton.onclick = async () => {
+                try {
+                    await video.play();
+                    retryButton.remove();
+                } catch (retryError) {
+                    console.error('Failed to start camera on retry:', retryError);
+                    alert('Unable to access the camera. Please check your camera permissions and try again.');
+                }
+            };
+            document.body.appendChild(retryButton);
+        }
     } catch (error) {
         console.error('Error accessing camera:', error);
-        // Handle the error (e.g., show a message to the user)
         alert('Unable to access the camera. Please ensure you have given permission and try again.');
     }
 
