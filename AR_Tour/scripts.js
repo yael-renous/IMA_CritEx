@@ -312,7 +312,7 @@ const run = async () => {
     try {
         const constraints = {
             video: {
-                facingMode: { ideal: "environment" }
+                facingMode: "environment" 
             }
         };
 
@@ -331,19 +331,19 @@ const run = async () => {
             await video.play();
         } catch (playError) {
             console.warn('Failed to start the camera stream:', playError);
-            // Create a retry button
-            const retryButton = document.createElement('button');
-            retryButton.textContent = 'Retry Camera Access';
-            retryButton.onclick = async () => {
-                try {
-                    await video.play();
-                    retryButton.remove();
-                } catch (retryError) {
-                    console.error('Failed to start camera on retry:', retryError);
-                    alert('Unable to access the camera. Please check your camera permissions and try again.');
-                }
-            };
-            document.body.appendChild(retryButton);
+            // // Create a retry button
+            // const retryButton = document.createElement('button');
+            // retryButton.textContent = 'Retry Camera Access';
+            // retryButton.onclick = async () => {
+            //     try {
+            //         await video.play();
+            //         retryButton.remove();
+            //     } catch (retryError) {
+            //         console.error('Failed to start camera on retry:', retryError);
+            //         alert('Unable to access the camera. Please check your camera permissions and try again.');
+            //     }
+            // };
+            // document.body.appendChild(retryButton);
         }
     } catch (error) {
         console.error('Error accessing camera:', error);
