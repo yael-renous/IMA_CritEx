@@ -19,33 +19,41 @@ function getObjectData(identifier) {
 
 // Function to detect faces and provide results
 async function detectFrame() {
-    console.log('detectFrame called');
-    // Detect faces, landmarks, descriptors, age, and gender from the video feed
-    const faceAIData = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors().withAgeAndGender()
+    try {
+        // Check if video is ready
+        if (video.readyState !== 4) {
+            requestAnimationFrame(detectFrame);
+            return;
+        }
 
-    // Clear the canvas before drawing new results
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+        const faceAIData = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors().withAgeAndGender()
 
-    // Detect objects
-    if (cocoSsdModel) {
-        const objectDetections = await cocoSsdModel.detect(video);
-        const resizedObjectDetections = resizeDetections(objectDetections, { width: canvas.width, height: canvas.height });
-        drawObjectDetections(resizedObjectDetections);
+        // Clear the canvas before drawing new results
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // Detect objects
+        if (cocoSsdModel) {
+            const objectDetections = await cocoSsdModel.detect(video);
+            const resizedObjectDetections = resizeDetections(objectDetections, { width: canvas.width, height: canvas.height });
+            drawObjectDetections(resizedObjectDetections);
+        }
+
+        // Resize face detections to match canvas size
+        const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
+
+        // Track faces between frames
+        trackFaces(resizedResults);
+
+        drawGenderDetection(resizedResults)
+    } catch (error) {
+        console.error('Error in detectFrame:', error);
     }
-
-    // Resize face detections to match canvas size
-    const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
-
-    // Track faces between frames
-    trackFaces(resizedResults);
-
-    drawGenderDetection(resizedResults)
-
     // Request the next animation frame to continue face detection
     requestAnimationFrame(detectFrame)
 }
 
 function trackFaces(currentDetections) {
+    console.log('trackFaces called with', currentDetections.length, 'detections');
     currentDetections.forEach(detection => {
         const matchingPrevious = previousFaceDetections.find(prev =>
             isSameFace(prev, detection)
@@ -101,6 +109,7 @@ function resizeDetections(detections, dimensions) {
 }
 
 function drawDetection(detection, info, type) {
+    console.log('drawDetection called for', type, 'with label:', info.identifier);
     // Determine the bounding box coordinates and dimensions based on detection type
     let x, y, width, height;
     let label;
@@ -213,27 +222,29 @@ function drawDetection(detection, info, type) {
 }
 
 function drawObjectDetections(detections) {
+    console.log('drawObjectDetections called with', detections.length, 'detections');
     detections.forEach(detection => {
         const objectInfo = getObjectData(detection.class);
         if (objectInfo) {
+            console.log('Drawing object:', detection.class);
             drawDetection(detection, objectInfo, 'object');
+        } else {
+            console.log('No object info found for:', detection.class);
         }
     });
 }
 
 function drawGenderDetection(detections) {
+    console.log('drawGenderDetection called with', detections.length, 'detections');
     detections.forEach(detection => {
         const { age, gender } = detection;
-        // let ageGroup;
-        // if (age < 18) ageGroup = 'child';
-        // else if (age >= 18 && age <= 50) ageGroup = 'adult';
-        // else ageGroup = 'senior';
-
-        // const identifier = `${gender.toLowerCase()}-${ageGroup}`;
         const faceInfo = getObjectData(gender.toLowerCase());
 
         if (faceInfo) {
+            console.log('Drawing face:', gender, 'Age:', age);
             drawDetection(detection, faceInfo, 'face');
+        } else {
+            console.log('No face info found for:', gender);
         }
     });
 }
@@ -411,6 +422,8 @@ function playGuide(filename) {
     console.log(videosrc);
     if (videosrc) {
         guideElement.src = videosrc;
+        guideElement.setAttribute('muted', '');
+        guideElement.setAttribute('playsinline', '')
         guideElement.play();
     }
 }
