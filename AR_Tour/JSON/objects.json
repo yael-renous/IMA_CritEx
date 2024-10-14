@@ -33,14 +33,14 @@
         "identifier": "bicycle",
         "color": "#00FF00",
         "descriptions": [
-            ["Eco-transport", "With over 400 miles of bike lanes, our city consistently ranks as the most bike-friendly in the nation", "bike.mp4"]
+            ["Bicycle", "With over 400 miles of bike lanes, our city consistently ranks as the most bike-friendly in the nation", "bike.mp4"]
         ]
     },
     {
         "identifier": "dog",
         "color": "#8B4513",
         "descriptions": [
-            ["Pet", "Our city has more dog parks per square mile than any other urban area in the world", "dog.mp4"]
+            ["Dog", "Our city has more dog parks per square mile than any other urban area in the world", "dog.mp4"]
         ]
     },
     {
@@ -54,21 +54,21 @@
         "identifier": "truck",
         "color": "#FFA500",
         "descriptions": [
-            ["Commercial Vehicle", "Our city hosts the world's largest annual food truck festival, featuring over 200 unique vendors", "truck.mp4"]
+            ["Truck", "Our city hosts the world's largest annual food truck festival, featuring over 200 unique vendors", "truck.mp4"]
         ]
     },
     {
         "identifier": "traffic light",
         "color": "#32CD32",
         "descriptions": [
-            ["Traffic Control", "Our AI-powered traffic lights have reduced average commute times by 23% since their installation", "traffic_light.mp4"]
+            ["Traffic Light", "Our AI-powered traffic lights have reduced average commute times by 23% since their installation", "traffic_light.mp4"]
         ]
     },
     {
         "identifier": "fire hydrant",
         "color": "#FF4500",
         "descriptions": [
-            ["Safety Equipment", "Every July since 1925, we open fire hydrants for children to play in the water", "fire_hydrant.mp4"]
+            ["Fire Hydrant", "Every July since 1925, we open fire hydrants for children to play in the water", "fire_hydrant.mp4"]
         ]
     },
     {
@@ -96,14 +96,14 @@
         "identifier": "motorcycle",
         "color": "#1E90FF",
         "descriptions": [
-            ["Two-wheeler", "The iconic 'CityRider' motorcycle was manufactured here from 1940 to 1985", "motorcycle.mp4"]
+            ["Motorcycle", "The iconic 'CityRider' motorcycle was manufactured here from 1940 to 1985", "motorcycle.mp4"]
         ]
     },
     {
         "identifier": "bird",
         "color": "#808080",
         "descriptions": [
-            ["Wildlife", "Our city is a haven for bird watchers, see if you can spot our local species", "bird.mp4"]
+            ["Bird", "Our city is a haven for bird watchers, see if you can spot our local species", "bird.mp4"]
         ]
     },
     {
@@ -124,7 +124,7 @@
         "identifier": "chair",
         "color": "#8B4513",
         "descriptions": [
-            ["Furniture", "Our city's 'Chair for All' program has installed 10,000 ergonomic public seats, improving accessibility since 2015", "chair.mp4"]
+            ["Chair", "Our city's 'Chair for All' program has installed 10,000 ergonomic public seats, improving accessibility since 2015", "chair.mp4"]
         ]
     }
 ]
