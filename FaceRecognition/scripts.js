@@ -290,19 +290,19 @@ const run = async () => {
     document.body.appendChild(video);
 
     // Access the user's camera
-    // const stream = await navigator.mediaDevices.getUserMedia({
-    //     video: {
-    //         facingMode: "environment"
-    //     }
-    // });
-    // video.srcObject = stream
+    const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+            facingMode: "environment"
+        }
+    });
+    video.srcObject = stream
 
 
     //-------For uploading prerecording ----
 
     // // Set the source of the video
-    video.src = 'Untitled.mp4'; // Replace with your video file path
-    video.loop = true; // Optional: loop the video
+    // video.src = 'Untitled.mp4'; // Replace with your video file path
+    // video.loop = true; // Optional: loop the video
 
     //-----------------------------
 
