@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Glitch';
-    src: url('Fonts/Glitch-demo.ttf') format('truetype'),
-         url('Fonts/Glitch-demo.woff') format('woff'),
-         url('Fonts/Glitch-demo.woff2') format('woff2');
+    src: url('./Fonts/Glitch-demo.ttf') format('truetype'),
+         url('./Fonts/Glitch-demo.woff') format('woff'),
+         url('./Fonts/Glitch-demo.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
