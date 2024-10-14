@@ -303,6 +303,9 @@ const run = async () => {
     console.log('Setting up video element...');
     video = document.createElement('video');
     video.id = 'video';
+    video.setAttribute('autoplay', '');
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '')
     document.body.appendChild(video);
 
     console.log('Attempting to access camera...');
