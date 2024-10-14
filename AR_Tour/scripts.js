@@ -193,6 +193,12 @@ function drawDetection(detection, info, type) {
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, width, height);
 
+    // Add fill with alpha, but not for female faces
+    if (!(type === 'face' && detection.gender === 'female')) {
+        ctx.fillStyle = `${info.color}33`; // 33 is 20% opacity in hex
+        ctx.fillRect(x, y, width, height);
+    }
+
     // Draw label background
     ctx.fillStyle = info.color;
     const labelWidth = ctx.measureText(label).width + 10; // Add some padding
@@ -217,13 +223,13 @@ function drawObjectDetections(detections) {
 function drawGenderDetection(detections) {
     detections.forEach(detection => {
         const { age, gender } = detection;
-        let ageGroup;
-        if (age < 18) ageGroup = 'child';
-        else if (age >= 18 && age <= 50) ageGroup = 'adult';
-        else ageGroup = 'senior';
+        // let ageGroup;
+        // if (age < 18) ageGroup = 'child';
+        // else if (age >= 18 && age <= 50) ageGroup = 'adult';
+        // else ageGroup = 'senior';
 
-        const identifier = `${gender.toLowerCase()}-${ageGroup}`;
-        const faceInfo = getObjectData(identifier);
+        // const identifier = `${gender.toLowerCase()}-${ageGroup}`;
+        const faceInfo = getObjectData(gender.toLowerCase());
 
         if (faceInfo) {
             drawDetection(detection, faceInfo, 'face');
@@ -312,14 +318,6 @@ const run = async () => {
         // Handle the error (e.g., show a message to the user)
         alert('Unable to access the camera. Please ensure you have given permission and try again.');
     }
-    // Access the user's camera
-    // const stream = await navigator.mediaDevices.getUserMedia({
-    //     video: {
-    //         facingMode: "environment"
-    //     }
-    // });
-    // video.srcObject = stream
-
 
     //-------For uploading prerecording ----
 
@@ -329,10 +327,6 @@ const run = async () => {
 
     //-----------------------------
 
-
-    // // Wait for the video metadata to load before playing
-    // await new Promise(resolve => video.onloadedmetadata = resolve);
-    // video.play();
 
     loadingElement = document.getElementById('loading')
     guideElement = document.getElementById('guide');
@@ -387,7 +381,7 @@ function displayDescription(label, info) {
         existingPopup.remove();
     }
 
-    const randomDescription = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
+    const randomDescription = info.descriptions[Math.floor(Math.random() * info.descriptions.length)][1];
 
     // Create new popup element
     const popup = document.createElement('div');

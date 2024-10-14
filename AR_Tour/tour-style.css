@@ -80,6 +80,13 @@ body {
     font-weight: bold;
     color: white;
     z-index: 1000;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { scale: 1; }
+    50% { scale: 1.1; }
+    100% { scale: 1; }
 }
 
 #guide {
