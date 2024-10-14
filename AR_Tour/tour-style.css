@@ -76,7 +76,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
     color: white;
     z-index: 1000;
@@ -92,11 +92,10 @@ body {
 #guide {
     position: fixed;
     bottom: 20px;
-    left: 20px;
-    width: 10vh;
-    height: 10vh;
+    left: 3%;
+    height: 12%;
     object-fit: cover;
-    border-radius: 50px;
+    border-radius: 200px;
     z-index: 1;
 }
 
