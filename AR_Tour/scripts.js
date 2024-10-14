@@ -208,7 +208,7 @@ function drawDetection(detection, info, type) {
 
     // Add fill with alpha, but not for female faces
     if (!(type === 'face' && detection.gender === 'female')) {
-        ctx.fillStyle = `${info.color}33`; // 33 is 20% opacity in hex
+        ctx.fillStyle = `${info.color}66`; 
         ctx.fillRect(x, y, width, height);
     }
 
