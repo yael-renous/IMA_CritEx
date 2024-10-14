@@ -36,7 +36,7 @@ async function detectFrame() {
     const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
     
     // Track faces between frames
-    // trackFaces(resizedResults);
+    trackFaces(resizedResults);
 
     drawGenderDetection(resizedResults)
 
@@ -289,13 +289,36 @@ const run = async () => {
     video.id = 'video';
     document.body.appendChild(video);
 
+
+    try {
+        const constraints = {
+            video: {
+                facingMode: { ideal: "environment" }
+            }
+        };
+        
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+        
+        // Wait for the video to be ready
+        await new Promise((resolve) => {
+            video.onloadedmetadata = () => {
+                video.play();
+                resolve();
+            };
+        });
+    } catch (error) {
+        console.error('Error accessing camera:', error);
+        // Handle the error (e.g., show a message to the user)
+        alert('Unable to access the camera. Please ensure you have given permission and try again.');
+    }
     // Access the user's camera
-    const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-            facingMode: "environment"
-        }
-    });
-    video.srcObject = stream
+    // const stream = await navigator.mediaDevices.getUserMedia({
+    //     video: {
+    //         facingMode: "environment"
+    //     }
+    // });
+    // video.srcObject = stream
 
 
     //-------For uploading prerecording ----
@@ -307,9 +330,9 @@ const run = async () => {
     //-----------------------------
 
 
-    // Wait for the video metadata to load before playing
-    await new Promise(resolve => video.onloadedmetadata = resolve);
-    video.play();
+    // // Wait for the video metadata to load before playing
+    // await new Promise(resolve => video.onloadedmetadata = resolve);
+    // video.play();
 
     loadingElement = document.getElementById('loading')
     guideElement = document.getElementById('guide');
