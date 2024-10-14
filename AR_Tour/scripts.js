@@ -312,25 +312,28 @@ const run = async () => {
     try {
         const constraints = {
             video: {
+                audio:false,
                 facingMode: "environment" 
             }
         };
 
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = stream;
+      navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
+            video.srcObject = stream;
+          });
+        // video.srcObject = stream;
 
-        // Wait for the video to be ready
-        await new Promise((resolve) => {
-            video.onloadedmetadata = () => {
-                resolve();
-            };
-        });
+        // // Wait for the video to be ready
+        // await new Promise((resolve) => {
+        //     video.onloadedmetadata = () => {
+        //         resolve();
+        //     };
+        // });
 
         // Attempt to play the video
-        try {
-            await video.play();
-        } catch (playError) {
-            console.warn('Failed to start the camera stream:', playError);
+        // try {
+        //     await video.play();
+        // } catch (playError) {
+        //     console.warn('Failed to start the camera stream:', playError);
             // // Create a retry button
             // const retryButton = document.createElement('button');
             // retryButton.textContent = 'Retry Camera Access';
@@ -344,7 +347,7 @@ const run = async () => {
             //     }
             // };
             // document.body.appendChild(retryButton);
-        }
+        // }
     } catch (error) {
         console.error('Error accessing camera:', error);
         alert('Unable to access the camera. Please ensure you have given permission and try again.');
