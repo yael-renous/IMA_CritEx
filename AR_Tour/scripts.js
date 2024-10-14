@@ -34,7 +34,7 @@ async function detectFrame() {
 
     // Resize face detections to match canvas size
     const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
-    
+
     // Track faces between frames
     trackFaces(resizedResults);
 
@@ -46,7 +46,7 @@ async function detectFrame() {
 
 function trackFaces(currentDetections) {
     currentDetections.forEach(detection => {
-        const matchingPrevious = previousFaceDetections.find(prev => 
+        const matchingPrevious = previousFaceDetections.find(prev =>
             isSameFace(prev, detection)
         );
 
@@ -118,7 +118,7 @@ function drawDetection(detection, info, type) {
         const heightIncrease = (height * scaleFactor - height) / 2;
 
         x -= widthIncrease;
-        y -= (heightIncrease/2);
+        y -= (heightIncrease / 2);
         width *= scaleFactor;
         height *= scaleFactor;
 
@@ -142,8 +142,8 @@ function drawDetection(detection, info, type) {
 
     //if click show alert
     if (isClicked) {
-        if (clickPos.x >= x*scaleX && clickPos.x <= x*scaleX + width*scaleX && 
-            clickPos.y >= y*scaleY && clickPos.y <= y*scaleY + height*scaleY) {
+        if (clickPos.x >= x * scaleX && clickPos.x <= x * scaleX + width * scaleX &&
+            clickPos.y >= y * scaleY && clickPos.y <= y * scaleY + height * scaleY) {
             displayDescription(label, info);
             isClicked = false;
         }
@@ -243,13 +243,13 @@ let previousFaceDetections = [];
 // Update handleCanvasClick function to work with bounding boxes
 function handleCanvasInteraction(event) {
     event.preventDefault(); // Prevent default behavior for touch events
-    
+
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    
+
     let clientX, clientY;
-    
+
     if (event.type === 'touchstart') {
         // Touch event
         clientX = event.touches[0].clientX;
@@ -259,10 +259,10 @@ function handleCanvasInteraction(event) {
         clientX = event.clientX;
         clientY = event.clientY;
     }
-    
+
     clickPos.x = (clientX - rect.left) * scaleX;
     clickPos.y = (clientY - rect.top) * scaleY;
-    
+
     isClicked = true;
     setTimeout(() => {
         isClicked = false;
@@ -302,10 +302,10 @@ const run = async () => {
                 facingMode: { ideal: "environment" }
             }
         };
-        
+
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         video.srcObject = stream;
-        
+
         // Wait for the video to be ready
         await new Promise((resolve) => {
             video.onloadedmetadata = () => {
@@ -356,7 +356,7 @@ const run = async () => {
     // Remove loading element after everything is loaded
     removeLoadingElement();
     setTimeout(() => {
-       playGuide();
+        playGuide("instructions.mp4");
     }, 8000);
 
     // Start the face detection process
@@ -364,14 +364,19 @@ const run = async () => {
 }
 
 function removeLoadingElement() {
-   ;
+    ;
     if (loadingElement) {
         loadingElement.style.display = 'none';
     }
 }
 
-function playGuide(){
-    guideElement.play();
+function playGuide(filename) {
+    // console.log(filename);
+    // let videosrc = `./Videos/${filename}`;
+    // if (videosrc) {
+    //     guideElement.src = videosrc;
+    //     guideElement.play();
+    // }
 }
 
 function displayDescription(label, info) {
@@ -390,17 +395,17 @@ function displayDescription(label, info) {
         <span class="close-btn">&times;</span>
         <strong>${label}:</strong> ${randomDescription}
     `;
-    
+
     // Add popup to the body
     document.body.appendChild(popup);
-    // playGuide();
-    
+    playGuide(randomDescription[2]);
+
     // Close button functionality
     const closeBtn = popup.querySelector('.close-btn');
     closeBtn.addEventListener('click', () => {
         popup.remove();
     });
-    
+
     // Remove popup after 5 seconds if not closed manually
     setTimeout(() => {
         if (document.body.contains(popup)) {

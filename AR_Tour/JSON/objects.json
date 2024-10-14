@@ -3,10 +3,10 @@
         "identifier": "female",
         "color": "#FF69B4",
         "descriptions": [
-            ["Community Leaders", "Our city's women are known for their entrepreneurial spirit", "female_leaders.mp4"],
-            ["Business Professionals", "You'll see many of them rushing to our thriving business district", "female_business.mp4"],
-            ["Event Organizers", "Our local women's groups organize fantastic community events", "female_events.mp4"],
-            ["Civic Engagers", "Many of our city's key leadership positions are held by women", "female_civic.mp4"],
+            ["Undefined", "Our city's women are known for their entrepreneurial spirit", "female_leaders.mp4"],
+            ["Bitch", "You'll see many of them rushing to our thriving business district", "female_business.mp4"],
+            ["Witch", "Our local women's groups organize fantastic community events", "female_events.mp4"],
+            ["Trophy Wife", "Many of our city's key leadership positions are held by women", "female_civic.mp4"],
             ["Fitness Enthusiasts", "The annual Women's Fun Run brings out participants of all ages", "female_fitness.mp4"],
             ["Business Owners", "Our women-owned businesses are a point of pride in the community", "female_owners.mp4"]
         ]
@@ -27,105 +27,105 @@
         "identifier": "car",
         "color": "#0000FF",
         "descriptions": [
-            ["Vehicle", "These cars reflect our city's love for personal transport", "car_transport.mp4"]
+            ["Vehicle", "Our city was home to one of the first car manufacturing plants in 1908", "car.mp4"]
         ]
     },
     {
         "identifier": "bicycle",
         "color": "#00FF00",
         "descriptions": [
-            ["Eco-transport", "Bikes are a big part of our eco-friendly culture", "bicycle_eco.mp4"]
+            ["Eco-transport", "With over 400 miles of bike lanes, our city consistently ranks as the most bike-friendly in the nation", "bicycle.mp4"]
         ]
     },
     {
         "identifier": "dog",
         "color": "#8B4513",
         "descriptions": [
-            ["Pet", "We're a very dog-friendly city, as you can tell", "dog_friendly.mp4"]
+            ["Pet", "Our city has more dog parks per square mile than any other urban area in the world", "dog.mp4"]
         ]
     },
     {
         "identifier": "bus",
         "color": "#FFFF00",
         "descriptions": [
-            ["Public Transit", "Our buses are the backbone of our public transit system", "bus_transit.mp4"]
+            ["Public Transit", "Our city's first electric trolleybus line, opened in 1935, is still in operation today", "bus.mp4"]
         ]
     },
     {
         "identifier": "truck",
         "color": "#FFA500",
         "descriptions": [
-            ["Commercial Vehicle", "These trucks keep our local businesses stocked and thriving", "truck_commerce.mp4"]
+            ["Commercial Vehicle", "Our city hosts the world's largest annual food truck festival, featuring over 200 unique vendors", "truck.mp4"]
         ]
     },
     {
         "identifier": "traffic light",
         "color": "#32CD32",
         "descriptions": [
-            ["Traffic Control", "Our traffic lights are smart, adjusting to traffic patterns", "traffic_light_smart.mp4"]
+            ["Traffic Control", "Our AI-powered traffic lights have reduced average commute times by 23% since their installation", "traffic_light.mp4"]
         ]
     },
     {
         "identifier": "fire hydrant",
         "color": "#FF4500",
         "descriptions": [
-            ["Safety Equipment", "These hydrants are vital to our heroic local fire department", "fire_hydrant_safety.mp4"]
+            ["Safety Equipment", "Every July since 1925, we open fire hydrants for children to play in the water", "fire_hydrant.mp4"]
         ]
     },
     {
         "identifier": "stop sign",
         "color": "#B22222",
         "descriptions": [
-            ["Traffic Sign", "Our stop signs have a unique local design, did you notice?", "stop_sign_unique.mp4"]
+            ["Traffic Sign", "Our stop signs have a unique local design, have you noticed?", "stop_sign.mp4"]
         ]
     },
     {
         "identifier": "bench",
         "color": "#8B4513",
         "descriptions": [
-            ["Public Seating", "These benches are popular spots for our local storytellers", "bench_stories.mp4"]
+            ["Public Seating", "In 2018, local artists transformed 500 city benches into unique art pieces", "bench.mp4"]
         ]
     },
     {
         "identifier": "potted plant",
         "color": "#228B22",
         "descriptions": [
-            ["Urban Greenery", "Our community takes pride in these urban green spaces", "potted_plant_green.mp4"]
+            ["Urban Greenery", "Our community takes pride in these urban green spaces", "plant.mp4"]
         ]
     },
     {
         "identifier": "motorcycle",
         "color": "#1E90FF",
         "descriptions": [
-            ["Two-wheeler", "Our city hosts an annual motorcycle parade, it's quite a sight!", "motorcycle_parade.mp4"]
+            ["Two-wheeler", "The iconic 'CityRider' motorcycle was manufactured here from 1940 to 1985", "motorcycle.mp4"]
         ]
     },
     {
         "identifier": "bird",
         "color": "#808080",
         "descriptions": [
-            ["Wildlife", "Our city is a haven for bird watchers, see if you can spot our local species", "bird_watching.mp4"]
+            ["Wildlife", "Our city is a haven for bird watchers, see if you can spot our local species", "bird.mp4"]
         ]
     },
     {
         "identifier": "sports ball",
         "color": "#FF6347",
         "descriptions": [
-            ["Recreation", "Our parks are always lively with various ball games", "sports_ball_games.mp4"]
+            ["Recreation", "Our city's invented sport, 'Spherical', combines elements of basketball and pinball", "sports_ball.mp4"]
         ]
     },
     {
         "identifier": "backpack",
         "color": "#4B0082",
         "descriptions": [
-            ["Accessory", "Spot the trendy local brands on these backpacks", "backpack_trends.mp4"]
+            ["Accessory", "Every student in our city receives a free, locally-made smart backpack with built-in solar charging", "backpack.mp4"]
         ]
     },
     {
         "identifier": "chair",
         "color": "#8B4513",
         "descriptions": [
-            ["Furniture", "Our public spaces are dotted with these comfortable seating options", "chair_public_spaces.mp4"]
+            ["Furniture", "Our city's 'Chair for All' program has installed 10,000 ergonomic public seats, improving accessibility since 2015", "chair.mp4"]
         ]
     }
 ]
