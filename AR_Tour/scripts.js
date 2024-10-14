@@ -19,6 +19,7 @@ function getObjectData(identifier) {
 
 // Function to detect faces and provide results
 async function detectFrame() {
+    console.log('detectFrame called');
     // Detect faces, landmarks, descriptors, age, and gender from the video feed
     const faceAIData = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors().withAgeAndGender()
 
@@ -271,31 +272,40 @@ function handleCanvasInteraction(event) {
 
 // Main function to run the facial detection
 const run = async () => {
+    console.log('Starting run function');
+
     // Load JSON data
+    console.log('Loading JSON data...');
     await loadObjectData();
+    console.log('JSON data loaded successfully');
 
     // Load required face-api.js models
+    console.log('Loading face-api.js models...');
     await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
         faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
         faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
         faceapi.nets.ageGenderNet.loadFromUri('./models'),
     ]);
+    console.log('face-api.js models loaded successfully');
 
     // Load COCO-SSD model
+    console.log('Loading COCO-SSD model...');
     try {
         cocoSsdModel = await cocoSsd.load();
+        console.log('COCO-SSD model loaded successfully');
     } catch (error) {
         console.error('Failed to load COCO-SSD model:', error);
         cocoSsdModel = null;
     }
 
     // Create a video element to display the camera feed
+    console.log('Setting up video element...');
     video = document.createElement('video');
     video.id = 'video';
     document.body.appendChild(video);
 
-
+    console.log('Attempting to access camera...');
     try {
         const constraints = {
             video: {
@@ -377,6 +387,7 @@ const run = async () => {
         playGuide("instructions.mp4");
     }, 8000);
 
+    console.log('Setup complete, starting face detection');
     // Start the face detection process
     detectFrame();
 }
