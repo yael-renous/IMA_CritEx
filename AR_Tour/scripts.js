@@ -20,10 +20,17 @@ function getObjectData(identifier) {
 // Function to detect faces and provide results
 async function detectFrame() {
     try {
-        // Check if video is ready
-        if (video.readyState !== 4) {
+        // Check if video is ready and has valid dimensions
+        if (video.readyState !== 4 || video.videoWidth === 0 || video.videoHeight === 0) {
             requestAnimationFrame(detectFrame);
             return;
+        }
+
+        // Ensure canvas dimensions match video dimensions
+        if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            console.log(`Canvas resized to ${canvas.width}x${canvas.height}`);
         }
 
         const faceAIData = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceDescriptors().withAgeAndGender()
@@ -53,7 +60,6 @@ async function detectFrame() {
 }
 
 function trackFaces(currentDetections) {
-    console.log('trackFaces called with', currentDetections.length, 'detections');
     currentDetections.forEach(detection => {
         const matchingPrevious = previousFaceDetections.find(prev =>
             isSameFace(prev, detection)
@@ -109,7 +115,6 @@ function resizeDetections(detections, dimensions) {
 }
 
 function drawDetection(detection, info, type) {
-    console.log('drawDetection called for', type, 'with label:', info.identifier);
     // Determine the bounding box coordinates and dimensions based on detection type
     let x, y, width, height;
     let label;
@@ -165,7 +170,6 @@ function drawDetection(detection, info, type) {
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = width;
         tempCanvas.height = height;
-        // tempCanvas.filter="grayscale(100%)";
         const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
 
         // Draw the detection area onto the temporary canvas, applying the scaling
@@ -186,7 +190,6 @@ function drawDetection(detection, info, type) {
         for (let y = 0; y < height; y += pixelSize) {
             for (let x = 0; x < width; x += pixelSize) {
                 const pixelData = tempCtx.getImageData(x, y, 1, 1).data;
-                // tempCtx.fillStyle = `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, ${pixelData[3] / 255})`;
                 // Convert to grayscale
                 const grayValue = Math.round(0.299 * pixelData[0] + 0.587 * pixelData[1] + 0.114 * pixelData[2]);
                 tempCtx.fillStyle = `rgba(${grayValue}, ${grayValue}, ${grayValue}, ${pixelData[3] / 255})`;
@@ -222,29 +225,21 @@ function drawDetection(detection, info, type) {
 }
 
 function drawObjectDetections(detections) {
-    console.log('drawObjectDetections called with', detections.length, 'detections');
     detections.forEach(detection => {
         const objectInfo = getObjectData(detection.class);
         if (objectInfo) {
-            console.log('Drawing object:', detection.class);
             drawDetection(detection, objectInfo, 'object');
-        } else {
-            console.log('No object info found for:', detection.class);
         }
     });
 }
 
 function drawGenderDetection(detections) {
-    console.log('drawGenderDetection called with', detections.length, 'detections');
     detections.forEach(detection => {
-        const { age, gender } = detection;
+        const { gender } = detection;
         const faceInfo = getObjectData(gender.toLowerCase());
 
         if (faceInfo) {
-            console.log('Drawing face:', gender, 'Age:', age);
             drawDetection(detection, faceInfo, 'face');
-        } else {
-            console.log('No face info found for:', gender);
         }
     });
 }
