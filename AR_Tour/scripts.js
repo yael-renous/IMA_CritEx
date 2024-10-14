@@ -371,12 +371,13 @@ function removeLoadingElement() {
 }
 
 function playGuide(filename) {
-    // console.log(filename);
-    // let videosrc = `./Videos/${filename}`;
-    // if (videosrc) {
-    //     guideElement.src = videosrc;
-    //     guideElement.play();
-    // }
+    console.log(filename);
+    let videosrc = `./Videos/${filename}`;
+    console.log(videosrc);
+    if (videosrc) {
+        guideElement.src = videosrc;
+        guideElement.play();
+    }
 }
 
 function displayDescription(label, info) {
@@ -386,7 +387,8 @@ function displayDescription(label, info) {
         existingPopup.remove();
     }
 
-    const randomDescription = info.descriptions[Math.floor(Math.random() * info.descriptions.length)][1];
+    let descriptionIndex = Math.floor(Math.random() * info.descriptions.length);
+    const randomDescription = info.descriptions[descriptionIndex][1];
 
     // Create new popup element
     const popup = document.createElement('div');
@@ -398,7 +400,8 @@ function displayDescription(label, info) {
 
     // Add popup to the body
     document.body.appendChild(popup);
-    playGuide(randomDescription[2]);
+    console.log(info.descriptions[descriptionIndex]);
+    playGuide(info.descriptions[descriptionIndex][2]);
 
     // Close button functionality
     const closeBtn = popup.querySelector('.close-btn');
@@ -411,7 +414,7 @@ function displayDescription(label, info) {
         if (document.body.contains(popup)) {
             popup.remove();
         }
-    }, 8000);
+    }, 10000);
 }
 
 // Call run when the DOM is loaded
