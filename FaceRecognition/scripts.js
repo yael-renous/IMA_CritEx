@@ -36,7 +36,7 @@ async function detectFrame() {
     const resizedResults = faceapi.resizeResults(faceAIData, { width: canvas.width, height: canvas.height })
     
     // Track faces between frames
-    trackFaces(resizedResults);
+    // trackFaces(resizedResults);
 
     drawGenderDetection(resizedResults)
 
@@ -290,19 +290,19 @@ const run = async () => {
     document.body.appendChild(video);
 
     // Access the user's camera
-    const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-            facingMode: "environment"
-        }
-    });
-    video.srcObject = stream
+    // const stream = await navigator.mediaDevices.getUserMedia({
+    //     video: {
+    //         facingMode: "environment"
+    //     }
+    // });
+    // video.srcObject = stream
 
 
     //-------For uploading prerecording ----
 
     // // Set the source of the video
-    // video.src = 'path/to/your/video.mp4'; // Replace with your video file path
-    // video.loop = true; // Optional: loop the video
+    video.src = 'Untitled.mp4'; // Replace with your video file path
+    video.loop = true; // Optional: loop the video
 
     //-----------------------------
 
@@ -376,7 +376,7 @@ function displayDescription(label, info) {
     
     // Add popup to the body
     document.body.appendChild(popup);
-    playGuide();
+    // playGuide();
     
     // Close button functionality
     const closeBtn = popup.querySelector('.close-btn');

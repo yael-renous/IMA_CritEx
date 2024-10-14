@@ -1,7 +1,7 @@
 [
     {
         "identifier": "female-child",
-        "color": "#de4509",
+        "color": "#FFC0CBB3",
         "descriptions": [
             ["Playground Princesses", "Our little girls are often seen enjoying our numerous playgrounds"],
             ["After-School Stars", "You'll spot young ladies participating in various after-school programs"],
@@ -13,7 +13,7 @@
     },
     {
         "identifier": "female-adult",
-        "color": "#de4509",
+        "color": "#FF69B4B3",
         "descriptions": [
             ["Witch", "Our city's women are known for their entrepreneurial spirit"],
             ["Bitch", "You'll see many of them rushing to our thriving business district"],
@@ -25,7 +25,7 @@
     },
     {
         "identifier": "female-senior",
-        "color": "#de4509",
+        "color": "#DDA0DDB3",
         "descriptions": [
             ["Hag", "Our senior ladies are the backbone of many volunteer organizations"],
             ["History Heroines", "You'll often see them leading guided tours of our historic sites"],
@@ -37,7 +37,7 @@
     },
     {
         "identifier": "male-child",
-        "color": "#61ea81",
+        "color": "#87CEEBB3",
         "descriptions": [
             ["Skate Park Pros", "Our young boys are often seen skateboarding in our custom-built parks"],
             ["Code Cadets", "You'll find many of them at our popular coding camps for kids"],
@@ -49,7 +49,7 @@
     },
     {
         "identifier": "male-adult",
-        "color": "#61ea81",
+        "color": "#4169E1B3",
         "descriptions": [
             ["River Runners", "Our city's men are often seen jogging along our scenic river path"],
             ["Tech Titans", "You'll spot many heading to our tech hub, a center of innovation"],
@@ -61,7 +61,7 @@
     },
     {
         "identifier": "male-senior",
-        "color": "#61ea81",
+        "color": "#708090B3",
         "descriptions": [
             ["Chess Champions", "Our senior gentlemen often gather for chess in the park"],
             ["School Supporters", "You'll see many of them volunteering at our local schools"],
@@ -73,7 +73,7 @@
     },
     {
         "identifier": "car",
-        "color": "#61ea81",
+        "color": "#0000FFB3",
         "descriptions": [
             "These cars reflect our city's love for personal transport",
             "You'll spot some unique local modifications on these vehicles",
@@ -85,7 +85,7 @@
     },
     {
         "identifier": "bicycle",
-        "color": "#61ea81",
+        "color": "#00FF00B3",
         "descriptions": [
             "Bikes are a big part of our eco-friendly culture",
             "Our city takes pride in its extensive bike lane network",
@@ -97,7 +97,7 @@
     },
     {
         "identifier": "dog",
-        "color": "#61ea81",
+        "color": "#8B4513B3",
         "descriptions": [
             "We're a very dog-friendly city, as you can tell",
             "Our local parks are always full of happy pups",
@@ -109,7 +109,7 @@
     },
     {
         "identifier": "bus",
-        "color": "#61ea81",
+        "color": "#FFFF00B3",
         "descriptions": [
             "Our buses are the backbone of our public transit system",
             "Locals lovingly call these 'yellow whales'",
@@ -121,7 +121,7 @@
     },
     {
         "identifier": "truck",
-        "color": "#61ea81",
+        "color": "#FFA500B3",
         "descriptions": [
             "These trucks keep our local businesses stocked and thriving",
             "You'll often see them delivering to our famous markets",
@@ -133,7 +133,7 @@
     },
     {
         "identifier": "traffic light",
-        "color": "#61ea81",
+        "color": "#32CD32B3",
         "descriptions": [
             "Our traffic lights are smart, adjusting to traffic patterns",
             "Local artists sometimes decorate these during city events",
@@ -145,7 +145,7 @@
     },
     {
         "identifier": "fire hydrant",
-        "color": "#61ea81",
+        "color": "#FF4500B3",
         "descriptions": [
             "These hydrants are vital to our heroic local fire department",
             "Kids love when we open these up on hot summer days",
@@ -157,7 +157,7 @@
     },
     {
         "identifier": "stop sign",
-        "color": "#61ea81",
+        "color": "#B22222B3",
         "descriptions": [
             "Our stop signs have a unique local design, did you notice?",
             "There's a funny local story about a stop sign heist, remind me to tell you later",
@@ -169,7 +169,7 @@
     },
     {
         "identifier": "bench",
-        "color": "#61ea81",
+        "color": "#8B4513B3",
         "descriptions": [
             "These benches are popular spots for our local storytellers",
             "Each bench is dedicated to a community member, look for the plaques",
@@ -181,7 +181,7 @@
     },
     {
         "identifier": "potted plant",
-        "color": "#61ea81",
+        "color": "#228B22B3",
         "descriptions": [
             "Our community takes pride in these urban green spaces",
             "Local businesses compete for the best potted plant displays",
@@ -193,7 +193,7 @@
     },
     {
         "identifier": "motorcycle",
-        "color": "#61ea81",
+        "color": "#1E90FFB3",
         "descriptions": [
             "Our city hosts an annual motorcycle parade, it's quite a sight!",
             "You'll see lots of delivery services using these to zip around",
@@ -205,7 +205,7 @@
     },
     {
         "identifier": "bird",
-        "color": "#61ea81",
+        "color": "#808080B3",
         "descriptions": [
             "Our city is a haven for bird watchers, see if you can spot our local species",
             "The pigeons here are practically city mascots",
@@ -217,7 +217,7 @@
     },
     {
         "identifier": "sports ball",
-        "color": "#61ea81",
+        "color": "#FF6347B3",
         "descriptions": [
             "Our parks are always lively with various ball games",
             "We have a quirky local sport involving these, want to learn the rules?",
@@ -229,7 +229,7 @@
     },
     {
         "identifier": "backpack",
-        "color": "#61ea81",
+        "color": "#4B0082B3",
         "descriptions": [
             "Spot the trendy local brands on these backpacks",
             "Students and professionals alike love our locally-made bags",
@@ -241,7 +241,7 @@
     },
     {
         "identifier": "chair",
-        "color": "#61ea81",
+        "color": "#8B4513B3",
         "descriptions": [
             "Our public spaces are dotted with these comfortable seating options",
             "Look for the unique designs in our artsy district - each chair is a masterpiece",

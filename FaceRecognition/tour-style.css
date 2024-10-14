@@ -1,31 +1,39 @@
 @font-face {
     font-family: 'Glitch';
-    src: url('Fonts/Glitch-demo.ttf') format('truetype');
+    src: url('Fonts/Glitch-demo.ttf') format('truetype'),
+         url('Fonts/Glitch-demo.woff') format('woff'),
+         url('Fonts/Glitch-demo.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 
 
 body {
     background-color: black;
-    font-family: 'Lucida Sans Unicode', monospace;
+    font-family: 'Glitch', 'Lucida Sans Unicode', monospace;
 }
 
 .header {
+    
     text-align: center;
-    font-family: 'Glitch';
+    font-weight: bold;
+    font-family: 'Glitch', 'Lucida Sans Unicode', monospace;
     font-size: 2rem;
     padding: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 80vw;
+    max-width: 40vw;
     background: linear-gradient(to bottom right, #61ea81e7, #cff7fff5);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 2;
     position: relative;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
-    width: 100%;
+    /* width: 100%; */
 }
 
 #canvas {
@@ -87,6 +95,7 @@ body {
 
 
 .description-popup {
+    font-family:  'Lucida Sans Unicode', monospace;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -123,3 +132,10 @@ body {
     align-items: left;
 }
 
+
+/* Add this media query at the end of the file */
+@media screen and (max-width: 768px) {
+    .header {
+        max-width: 80vw;
+    }
+}
