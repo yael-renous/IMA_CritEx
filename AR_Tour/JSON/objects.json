@@ -3,24 +3,23 @@
         "identifier": "female",
         "color": "#FF69B4",
         "descriptions": [
-            ["Undefined", "Our city's women are known for their entrepreneurial spirit", "female_leaders.mp4"],
-            ["Bitch", "You'll see many of them rushing to our thriving business district", "female_business.mp4"],
-            ["Witch", "Our local women's groups organize fantastic community events", "female_events.mp4"],
-            ["Trophy Wife", "Many of our city's key leadership positions are held by women", "female_civic.mp4"],
-            ["Fitness Enthusiasts", "The annual Women's Fun Run brings out participants of all ages", "female_fitness.mp4"],
-            ["Business Owners", "Our women-owned businesses are a point of pride in the community", "female_owners.mp4"]
+            ["Error 404", "Object not found", "female_error.mp4"],
+            ["Bitch", "Some of the city's women have unexpected attitudes", "female_bitch.mp4"],
+            ["Witch", "You'll find local women's groups which organize devil worshipping ceremonies", "female_witch.mp4"],
+            ["Trophy Wife", "Our city takes pride in it's beautiful women", "female_trophy.mp4"],
+            ["Maid", "The local women are known for their great housekeeping skills", "female_maid.mp4"],
+            ["Mother", "Birthing and raising children is our community's top priority", "female_mother.mp4"]
         ]
     },
     {
         "identifier": "male",
         "color": "#4169E1",
         "descriptions": [
-            ["River Runners", "Our city's men are often seen jogging along our scenic river path", "male_runners.mp4"],
-            ["Tech Titans", "You'll spot many heading to our tech hub, a center of innovation", "male_tech.mp4"],
-            ["Family Fun Facilitators", "Our local dads' group organizes fantastic family events", "male_family.mp4"],
-            ["Artisan Aces", "Many of our city's artisans showcase their crafts in the market", "male_artisans.mp4"],
-            ["Culinary Competitors", "The annual 'Man vs. Food' charity event is always a crowd-pleaser", "male_culinary.mp4"],
-            ["Melodic Maestros", "Our men's choir is renowned throughout the region", "male_choir.mp4"]
+            ["Innovation Pioneer", "You'll find many groundbreaking projects led by our men in our world-class research centers", "male_innovation.mp4"],
+            ["Community Leader", "Our city's men play key roles in local government and community initiatives", "male_leaders.mp4"],
+            ["Business Founder", "Numerous local businesses were started by enterprising men in our community", "male_business.mp4"],
+            ["Educational Mentor", "Many of our men are dedicated educators who inspire the next generation", "male_education.mp4"],
+            ["Healthcare Hero", "Many men serve as doctors, nurses, and first responders in our community", "male_healthcare.mp4"]
         ]
     },
     {

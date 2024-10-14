@@ -64,16 +64,9 @@ function trackFaces(currentDetections) {
         const matchingPrevious = previousFaceDetections.find(prev =>
             isSameFace(prev, detection)
         );
-
         if (matchingPrevious) {
-            // This is likely the same face
-            detection.id = matchingPrevious.id;
-            detection.label = matchingPrevious.label; // Preserve the label
-        } else {
-            // This is a new face
-            detection.id = generateUniqueId();
-            // The label will be generated in drawDetection
-        }
+            detection.label = matchingPrevious.label;
+        } 
     });
 
     // Update previous detections for the next frame
@@ -118,7 +111,7 @@ function drawDetection(detection, info, type) {
     // Determine the bounding box coordinates and dimensions based on detection type
     let x, y, width, height;
     let label;
-
+    let descriptionIndex;
     if (type === 'face') {
         // For face detections, use the 'detection' property
         const box = detection.detection.box;
@@ -138,18 +131,30 @@ function drawDetection(detection, info, type) {
         height *= scaleFactor;
 
         // Use the tracked label if available, otherwise generate a new one
-        if (!detection.label) {
-            const randomItem = info.descriptions[Math.floor(Math.random() * info.descriptions.length)];
-            detection.label = randomItem[0]; // Assuming the first element is the label
+        if (detection.label) {
+            label = detection.label;
+            descriptionIndex = info.descriptions.findIndex(desc => desc[0] === label);
+            if (descriptionIndex === -1) {
+                // If no matching description found, choose a random one
+                descriptionIndex = Math.floor(Math.random() * info.descriptions.length)
+                label = info.descriptions[descriptionIndex][0];
+            }
         }
-        label = detection.label;
+        else {
+            descriptionIndex = Math.floor(Math.random() * info.descriptions.length)
+            label = info.descriptions[descriptionIndex][0];
+        }
+  
     } else {
         // For object detections, use the 'bbox' array
         [x, y, width, height] = detection.bbox;
-
-        // Use the class name as the label for object detections
-        label = detection.class;
+        descriptionIndex = Math.floor(Math.random() * info.descriptions.length);
+        label = info.descriptions[descriptionIndex][0];
     }
+    detection.label = label;
+
+    const descriptionText = info.descriptions[descriptionIndex][1];
+    const videoFile = info.descriptions[descriptionIndex][2];
 
     // Calculate the scaling factors
     const scaleX = video.videoWidth / canvas.width;
@@ -159,7 +164,8 @@ function drawDetection(detection, info, type) {
     if (isClicked) {
         if (clickPos.x >= x * scaleX && clickPos.x <= x * scaleX + width * scaleX &&
             clickPos.y >= y * scaleY && clickPos.y <= y * scaleY + height * scaleY) {
-            displayDescription(label, info);
+            displayDescription(label, descriptionText);
+            playGuide(videoFile);
             isClicked = false;
         }
     }
@@ -208,7 +214,7 @@ function drawDetection(detection, info, type) {
 
     // Add fill with alpha, but not for female faces
     if (!(type === 'face' && detection.gender === 'female')) {
-        ctx.fillStyle = `${info.color}66`; 
+        ctx.fillStyle = `${info.color}66`;
         ctx.fillRect(x, y, width, height);
     }
 
@@ -318,14 +324,14 @@ const run = async () => {
     try {
         const constraints = {
             video: {
-                audio:false,
-                facingMode: "environment" 
+                audio: false,
+                facingMode: "environment"
             }
         };
 
-      navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
+        navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
             video.srcObject = stream;
-          });
+        });
         // video.srcObject = stream;
 
         // // Wait for the video to be ready
@@ -340,19 +346,19 @@ const run = async () => {
         //     await video.play();
         // } catch (playError) {
         //     console.warn('Failed to start the camera stream:', playError);
-            // // Create a retry button
-            // const retryButton = document.createElement('button');
-            // retryButton.textContent = 'Retry Camera Access';
-            // retryButton.onclick = async () => {
-            //     try {
-            //         await video.play();
-            //         retryButton.remove();
-            //     } catch (retryError) {
-            //         console.error('Failed to start camera on retry:', retryError);
-            //         alert('Unable to access the camera. Please check your camera permissions and try again.');
-            //     }
-            // };
-            // document.body.appendChild(retryButton);
+        // // Create a retry button
+        // const retryButton = document.createElement('button');
+        // retryButton.textContent = 'Retry Camera Access';
+        // retryButton.onclick = async () => {
+        //     try {
+        //         await video.play();
+        //         retryButton.remove();
+        //     } catch (retryError) {
+        //         console.error('Failed to start camera on retry:', retryError);
+        //         alert('Unable to access the camera. Please check your camera permissions and try again.');
+        //     }
+        // };
+        // document.body.appendChild(retryButton);
         // }
     } catch (error) {
         console.error('Error accessing camera:', error);
@@ -423,28 +429,28 @@ function playGuide(filename) {
     }
 }
 
-function displayDescription(label, info) {
+function displayDescription(label, descriptionText) {
     // Remove existing popup if present
     const existingPopup = document.querySelector('.description-popup');
     if (existingPopup) {
         existingPopup.remove();
     }
 
-    let descriptionIndex = Math.floor(Math.random() * info.descriptions.length);
-    const randomDescription = info.descriptions[descriptionIndex][1];
+    // let descriptionIndex = Math.floor(Math.random() * info.descriptions.length);
+    // const randomDescription = info.descriptions[descriptionIndex][1];
 
     // Create new popup element
     const popup = document.createElement('div');
     popup.className = 'description-popup';
     popup.innerHTML = `
         <span class="close-btn">&times;</span>
-        <strong>${label}:</strong> ${randomDescription}
+        <strong>${label}:</strong> ${descriptionText}
     `;
 
     // Add popup to the body
     document.body.appendChild(popup);
-    console.log(info.descriptions[descriptionIndex]);
-    playGuide(info.descriptions[descriptionIndex][2]);
+    // console.log(info.descriptions[descriptionIndex]);
+    // playGuide(info.descriptions[descriptionIndex][2]);
 
     // Close button functionality
     const closeBtn = popup.querySelector('.close-btn');
